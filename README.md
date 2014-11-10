@@ -35,7 +35,7 @@ var flattener = MSLayerFlattener.alloc().init();
 flattener.flattenLayers(selection);
 ```
 Complete examples:
-- [Flatten Selection to Bitmap.sketchplugin](./Samples/Flatten Selection to Bitmap.sketchplugin)
+- [Flatten Selection to Bitmap.sketchplugin](./Samples/Flatten Selection To Bitmap.sketchplugin)
 
 Works in:
 - Sketch 3.2 +
