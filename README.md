@@ -9,9 +9,16 @@ If you want to flatten a complex vector layer that contains several sub paths co
 
 ![Flatten Vector Shape](./docs/flatten_vector_shape.png)
 
+This sample code flattens a first selected vector layer:
 ```JavaScript
 var layer=selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
     layer.flatten();
 }
 ```
+
+Complete examples:
+- [Flatten Vector Layer.sketchplugin](./Flatten Vector Layer.sketchplugin)
+
+Available in:
+- Sketch 3.2 +
