@@ -1,0 +1,24 @@
+var layer=selection.firstObject();
+if(layer && layer.isKindOfClass(MSShapeGroup)) {
+
+    function createDot(x,y,parent) {
+        var radius = 7;
+        var shape = MSShapeGroup.shapeWithBezierPath(NSBezierPath.bezierPathWithOvalInRect(NSMakeRect(x-radius/2,y-radius/2,radius,radius)));
+        var fill=shape.style().fills().addNewStylePart();
+
+        var color=MSColor.colorWithSVGString("#dd0000");
+        color.alpha = 0.8;
+        fill.color = color;
+
+        parent.addLayers([shape]);
+    }
+
+    var count=15;
+    var path=layer.bezierPathWithTransforms();
+
+    var step=path.length()/count;
+    for(var i=0;i<=count;i++) {
+        var point=path.pointOnPathAtLength(step*i);
+        createDot(point.x,point.y,layer.parentGroup());
+    }
+} 

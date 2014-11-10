@@ -1,0 +1,14 @@
+(function(){
+    var layer=selection.firstObject();
+    if(layer && layer.isKindOfClass(MSShapeGroup)) {
+
+        var count=15;
+        var path=layer.bezierPathWithTransforms();
+
+        var step=path.length()/count;
+        for(var i=0;i<=count;i++) {
+            var point=path.pointOnPathAtLength(step*i);
+            print(point);
+        }
+    }
+})();

@@ -81,4 +81,34 @@ Complete examples:
 - [Convert Text Layer to Outlines.sketchplugin](./Samples/Convert Text Layer to Outlines.sketchplugin)
 
 Works in:
+- Sketch 3.1 +
+
+## Get Points Coords Along the Shape Path
+
+If you want to distribute some shapes along a path there is a convenient method `-pointOnPathAtLength:` implemented in `NSBezierPath_Slopes` class extension.
+
+This method accepts a `double` value from 0 to 1 and represents a length at which you want to get a point coordinate. It returns a `CGPoint` struct with coordinates of the point.
+
+![Ge points coords along shape path](./docs/getting_points_along_path.png)
+
+The following example divides shape path into 15 segments and prints out their points coordinates:
+```JavaScript
+var layer=selection.firstObject();
+if(layer && layer.isKindOfClass(MSShapeGroup)) {
+
+    var count=15;
+    var path=layer.bezierPathWithTransforms();
+
+    var step=path.length()/count;
+    for(var i=0;i<=count;i++) {
+        var point=path.pointOnPathAtLength(step*i);
+        print(point);
+    }
+}
+```
+Complete examples:
+- [Get Points Coords Along Path.sketchplugin](./Samples/Get Points Coords Along Path.sketchplugin)
+- [Create Dots Along Path.sketchplugin](./Samples/Create Dots Along Path.sketchplugin)
+
+Works in:
 - Sketch 3.2 +
