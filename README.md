@@ -18,7 +18,7 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
 ```
 
 Complete examples:
-- [Flatten Vector Layer.sketchplugin](./Flatten Vector Layer.sketchplugin)
+- [Flatten Vector Layer.sketchplugin](./Samples/Flatten Vector Layer.sketchplugin)
 
 Available in:
 - Sketch 3.2 +
