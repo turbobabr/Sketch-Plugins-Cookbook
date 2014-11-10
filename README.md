@@ -1,7 +1,9 @@
-Sketch-Plugins-Cookbook
+Sketch Plugins Cookbook
 =======================
 
-A collection of recipes for Sketch App plugins developers
+A collection of recipes for Sketch App plugins developers.
+
+I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
 ## Flatten Vector Layer
 

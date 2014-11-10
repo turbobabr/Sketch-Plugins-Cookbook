@@ -1,0 +1,9 @@
+(function(){
+    var layer=selection.firstObject();
+    if(layer && layer.isKindOfClass(MSShapeGroup)) {
+        var rectLayer = layer.layers().firstObject();
+        if(rectLayer && rectLayer.isKindOfClass(MSRectangleShape)) {
+            rectLayer.cornerRadiusFloat=20;
+        }
+    }
+})();

@@ -1,0 +1,15 @@
+(function(){
+
+    var parent = doc.currentPage();
+    var rectLayer=parent.addLayerOfType("rectangle");
+
+    rectLayer.frame = MSRect.rectWithRect(NSMakeRect(10,10,360,240));
+    rectLayer.cornerRadiusFloat = 25;
+
+    var shapeGroup=rectLayer.embedInShapeGroup();
+    var fill=shapeGroup.style().fills().addNewStylePart();
+    fill.color=MSColor.colorWithSVGString("#dd0000");
+
+    doc.currentPage().selectLayers([shapeGroup]);
+
+})();
