@@ -5,6 +5,28 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Missing 'MSColor.colorWithHex:alpha:'? :)
+
+Prior to Sketch 3.2 there was a really nice and handy class method called `MSColor.colorWithHex:alpha:` that allowed to create instance of `MSColor` class with hex string, but unfortunately with the release of Sketch 3.2 version it was removed from the API.
+
+Good news everyone! The replacement for this method does exist:
+```JavaScript
+// Create color without alpha.
+var color = MSColor.colorWithSVGString("#FF0000");
+print(color);
+// -> (r:1.000000 g:0.000000 b:0.000000 a:1.000000)
+
+
+// Create color with alpha.
+var color = MSColor.colorWithSVGString("#FF0000");
+color.alpha = 0.2;
+print(color);
+// -> (r:1.000000 g:0.000000 b:0.000000 a:0.200000)
+```
+
+Works in:
+- Sketch 3.0 +
+
 ## Flatten Vector Layer
 
 If you want to flatten a complex vector layer that contains several sub paths combined using different boolean operation into single layer, you can use `+MSShapeGroup.flatten` method.
