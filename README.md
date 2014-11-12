@@ -5,6 +5,43 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Create Shared Style Programmatically
+
+In order to create a shared style programmatically you use `-MSSharedLayerStyleContainer.addSharedStyleWithName:(NSString*)name firstInstance:(MSStyle*)style` method, where `name` is a name of shared style being created, `style` is a reference style used as a template for future shared style.
+
+You can create a shared style from the existing style that is bound to some layer or create it from scratch with a custom `MSStyle` instance.
+
+![Create Shared Style Programmically](./docs/create_shared_style_programmatically.png)
+
+Create shared style from selected layers' style:
+```JavaScript
+var layer=selection.firstObject();
+if(layer) {
+    var sharedStyles=doc.documentData().layerStyles();
+    sharedStyles.addSharedStyleWithName_firstInstance("Custom Style",layer.style());
+}
+```
+
+Create shared style from scratch:
+```JavaScript
+var sharedStyles=doc.documentData().layerStyles();
+
+var style=MSStyle.alloc().init();
+var fill=style.fills().addNewStylePart();
+fill.color = MSColor.colorWithSVGString("#B1C151");
+
+sharedStyles.addSharedStyleWithName_firstInstance("Custom Style 2",style);
+
+doc.reloadInspector();
+```
+
+Complete examples:
+- [Create Shared Style From Selected Layer.sketchplugin](./Samples/Create Shared Style From Selected Layer.sketchplugin)
+- [Create Shared Style Programmatically.sketchplugin](./Samples/Create Shared Style Programmatically.sketchplugin)
+
+Works in:
+- Sketch 3.1 +
+
 ## Missing 'MSColor.colorWithHex:alpha:'? :)
 
 Prior to Sketch 3.2 there was a really nice and handy class method called `MSColor.colorWithHex:alpha:` that allowed to create instance of `MSColor` class with hex string, but unfortunately with the release of Sketch 3.2 version it was removed from the API.

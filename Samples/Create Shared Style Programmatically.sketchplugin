@@ -1,0 +1,27 @@
+(function(){
+
+    var sharedStyles=doc.documentData().layerStyles(); // Get shared styles container.
+
+    // Ceate custom style programmatically.
+    var style=MSStyle.alloc().init();
+
+    // Setup fill.
+    var fill=style.fills().addNewStylePart();
+    fill.color = MSColor.colorWithSVGString("#B1C151");
+
+    // Setup border.
+    var border=style.borders().addNewStylePart();
+    border.color = MSColor.whiteColor();
+    border.thickness = 3;
+    border.position = 1; // Inside
+
+    // Setup shadow with default settings.
+    style.shadows().addNewStylePart();
+
+    // Add style to the container of shared styles.
+    sharedStyles.addSharedStyleWithName_firstInstance("Custom Style (programmatic)",style);
+
+    // Refresh inspector to reflect changes.
+    doc.reloadInspector();
+
+})();
