@@ -5,6 +5,30 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Create Oval Shape
+
+In order to create an oval shape programmatically, you have to create an instance of `MSOvalShape` class, set its frame and wrap with `MSShapeGroup` container.
+
+![Create Oval Shape](./docs/create_oval_shape.png)
+
+The following sample demonstrates how to do it:
+```JavaScript
+var ovalShape = MSOvalShape.alloc().init();
+ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
+
+var shapeGroup=ovalShape.embedInShapeGroup();
+var fill = shapeGroup.style().fills().addNewStylePart();
+fill.color = MSColor.colorWithSVGString("#dd2020");
+
+doc.currentPage().addLayers([shapeGroup]);
+```
+
+Complete examples:
+- [Create Oval Shape.sketchplugin](./Samples/Create Oval Shape.sketchplugin)
+
+Works in:
+- Sketch 3.1 +
+
 ## Create Shared Style Programmatically
 
 In order to create a shared style programmatically you use `-MSSharedLayerStyleContainer.addSharedStyleWithName:(NSString*)name firstInstance:(MSStyle*)style` method, where `name` is a name of shared style being created, `style` is a reference style used as a template for future shared style.
@@ -53,7 +77,6 @@ var color = MSColor.colorWithSVGString("#FF0000");
 print(color);
 // -> (r:1.000000 g:0.000000 b:0.000000 a:1.000000)
 
-
 // Create color with alpha.
 var color = MSColor.colorWithSVGString("#FF0000");
 color.alpha = 0.2;
@@ -66,7 +89,7 @@ Works in:
 
 ## Flatten Vector Layer
 
-If you want to flatten a complex vector layer that contains several sub paths combined using different boolean operation into single layer, you can use `+MSShapeGroup.flatten` method.
+If you want to flatten a complex vector layer that contains several sub paths combined using different boolean operations into single layer, you can use `+MSShapeGroup.flatten` method.
 
 ![Flatten Vector Shape](./docs/flatten_vector_shape.png)
 
