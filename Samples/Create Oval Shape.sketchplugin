@@ -14,14 +14,3 @@
     // Add created shape group to the current page.
     doc.currentPage().addLayers([shapeGroup]);
 })();
-
-
-var ovalShape = MSOvalShape.alloc().init();
-ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
-
-var shapeGroup=ovalShape.embedInShapeGroup();
-var fill = shapeGroup.style().fills().addNewStylePart();
-fill.color = MSColor.colorWithSVGString("#dd2020");
-
-doc.currentPage().addLayers([shapeGroup]);
-
