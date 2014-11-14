@@ -5,6 +5,27 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Finding Bounds For a Set of Layers
+
+If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(GKRect*)MSLayerGroup.groupBoundsForLayers:(NSArray*)layers`. It accepts a list of layers and returns an instance of [GKRect](https://github.com/BohemianCoding/GeometryKit/blob/c738cdec6196230eada5925ebc19fe42bc1205f5/Source/GKRect.h) class which is the part of open source [GeometryKit](https://github.com/BohemianCoding/GeometryKit) by Bohemian Coding that is widely used in Sketch App.
+
+![Finding ](./docs/find_selection_bounds.png)
+
+A quick sample that demonstrate how to use it:
+```JavaScript
+var bounds=MSLayerGroup.groupBoundsForLayers(selection);
+
+print("x: "+bounds.x());
+print("y: "+bounds.y());
+print("width: "+bounds.width());
+print("height: "+bounds.height());
+print("mixX: "+bounds.midX());
+print("mixX: "+bounds.midY());
+```
+
+Works in:
+- Sketch 3.1 +
+
 ## Create Oval Shape
 
 In order to create an oval shape programmatically, you have to create an instance of `MSOvalShape` class, set its frame and wrap with `MSShapeGroup` container.
