@@ -13,7 +13,8 @@ This method produces the same result as a standard [Scale](http://bohemiancoding
 
 > Note: After the call of the method, `x` and `y` position values will also be multiplied. If you need the layer to remain in the same position after scaling, you'll have to change its position to the appropriate values.
 
-![Scaling Layers](./docs/find_selection_bounds.png)
+![Finding Selection Bounds](./docs/scale_layers.png)
+
 
 The following sample demonstrates how to scale first selected layer:
 ```JavaScript
@@ -39,7 +40,7 @@ Works in:
 
 If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(GKRect*)MSLayerGroup.groupBoundsForLayers:(NSArray*)layers`. It accepts a list of layers and returns an instance of [GKRect](https://github.com/BohemianCoding/GeometryKit/blob/c738cdec6196230eada5925ebc19fe42bc1205f5/Source/GKRect.h) class which is the part of open source [GeometryKit](https://github.com/BohemianCoding/GeometryKit) by Bohemian Coding that is widely used in Sketch App.
 
-![Finding Selection Bounds](./docs/scale_layers.png)
+![Scaling Layers](./docs/find_selection_bounds.png)
 
 A quick sample that demonstrate how to use it:
 ```JavaScript
