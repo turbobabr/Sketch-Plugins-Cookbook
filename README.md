@@ -5,11 +5,41 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Scaling Layers
+
+You can scale any layer using `-MSLayer.multiplyBy:(double)scaleFactor` instance method, where `scaleFactor` is a floating-point value that is used to multiple all the layers' properties including position, size, and all the style attributes such as border thickness, shadow, etc. Here are some example scale factors: `1.0 = 100%`, `2.5 = 250%`, `0.5 = 50%`, etc.
+
+This method produces the same result as a standard [Scale](http://bohemiancoding.com/sketch/support/documentation/03-layer-basics/4-resizing-layers.html) tool. Since all the layer type classes are inherited from `MSLayer` class, you can use this method to scale any type of layer including Pages and Artboards.
+
+> Note: After the call of the method, `x` and `y` position values will also be multiplied. If you need the layer to remain in the same position after scaling, you'll have to change its position to the appropriate values.
+
+![Scaling Layers](./docs/find_selection_bounds.png)
+
+The following sample demonstrates how to scale first selected layer:
+```JavaScript
+var layer = selection.firstObject();
+if(layer) {
+    // Preserve layer center point.
+    var midX=layer.frame().midX();
+    var midY=layer.frame().midY();
+
+    // Scale layer by 200%
+    layer.multiplyBy(2.0);
+
+    // Translate frame to the original center point.
+    layer.frame().midX = midX;
+    layer.frame().midY = midY;
+}
+```
+
+Works in:
+- Sketch 3.1 +
+
 ## Finding Bounds For a Set of Layers
 
 If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(GKRect*)MSLayerGroup.groupBoundsForLayers:(NSArray*)layers`. It accepts a list of layers and returns an instance of [GKRect](https://github.com/BohemianCoding/GeometryKit/blob/c738cdec6196230eada5925ebc19fe42bc1205f5/Source/GKRect.h) class which is the part of open source [GeometryKit](https://github.com/BohemianCoding/GeometryKit) by Bohemian Coding that is widely used in Sketch App.
 
-![Finding ](./docs/find_selection_bounds.png)
+![Finding Selection Bounds](./docs/scale_layers.png)
 
 A quick sample that demonstrate how to use it:
 ```JavaScript
