@@ -5,6 +5,33 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Set Border Radius for Specific Corners
+
+Starting from version 3.2 Sketch allows to set custom border radius for specific corner of rectangle shape. It was possible prior to 3.2, but there was no direct API.
+
+In order to set custom radiuses you use `-MSRectangleShape.setCornerRadiusFromComponents:(NSString*)compoents` instance method, where `components` is a string represents radiuses for every corner separated by `/` sybmols.
+
+![Set Custom Border Radius](./docs/set_custom_border_radius_for_specific_corner.png)
+
+The sequence is the following: `left-top/right-top/right-bottom/left-bottom`.
+
+The following sample sets left-top and right-top corners of a selected rect shape to 15 points:
+```JavaScript
+var layer = selection.firstObject();
+if(layer && layer.isKindOfClass(MSShapeGroup)) {
+    var shape=layer.layers().firstObject();
+    if(shape && shape.isKindOfClass(MSRectangleShape)) {
+        shape.setCornerRadiusFromComponents("15/15/0/0");
+    }
+}
+```
+
+Complete examples:
+- [Set Border Radius From Components.sketchplugin](./Samples/Set Border Radius From Components.sketchplugin)
+
+Works in:
+- Sketch 3.2 +
+
 ## Scaling Layers
 
 You can scale any layer using `-MSLayer.multiplyBy:(double)scaleFactor` instance method, where `scaleFactor` is a floating-point value that is used to multiple all the layers' properties including position, size, and all the style attributes such as border thickness, shadow, etc. Here are some example scale factors: `1.0 = 100%`, `2.5 = 250%`, `0.5 = 50%`, etc.
