@@ -9,11 +9,9 @@ I will be posting daily updates in my twitter. Follow me [@turbobabr](https://tw
 
 Starting from version 3.2 Sketch allows to set custom border radius for specific corner of rectangle shape. It was possible prior to 3.2, but there was no direct API.
 
-In order to set custom radiuses you use `-MSRectangleShape.setCornerRadiusFromComponents:(NSString*)compoents` instance method, where `components` is a string represents radiuses for every corner separated by `/` sybmols.
-
 ![Set Custom Border Radius](./docs/set_custom_border_radius_for_specific_corner.png)
 
-The sequence is the following: `left-top/right-top/right-bottom/left-bottom`.
+In order to set custom radiuses you use `-MSRectangleShape.setCornerRadiusFromComponents:(NSString*)compoents` instance method, where `components` is a string that represents radius values for every corner separated by `/` sybmols. The sequence is following: `left-top/right-top/right-bottom/left-bottom`.
 
 The following sample sets left-top and right-top corners of a selected rect shape to 15 points:
 ```JavaScript
