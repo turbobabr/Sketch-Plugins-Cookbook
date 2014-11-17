@@ -295,7 +295,7 @@ Works in:
 
 If you want to distribute some shapes along a path there is a convenient method `-pointOnPathAtLength:` implemented in `NSBezierPath_Slopes` class extension.
 
-This method accepts a `double` value from 0 to 1 and represents a length at which you want to get a point coordinate. It returns a `CGPoint` struct with coordinates of the point.
+This method accepts a `double` value that represents a position on path at which you want to get a point coordinate. It returns a `CGPoint` struct with coordinates of the point.
 
 ![Ge points coords along shape path](./docs/getting_points_along_path.png)
 
