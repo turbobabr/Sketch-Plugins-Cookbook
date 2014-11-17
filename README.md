@@ -5,6 +5,53 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Create Line Shape
+
+In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class and add two points to it. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
+
+![Create Line Shape](./docs/create_line_shape.png)
+
+To make Sketch recognize the provided path as a line shape, you have to add only two points using `moveToPoint` & `lineToPoint` methods of `NSBezierPath`.
+
+The following example creates a simple line shape with two points:
+```JavaScript
+var path = NSBezierPath.bezierPath();
+path.moveToPoint(NSMakePoint(10,10));
+path.lineToPoint(NSMakePoint(200,200));
+
+var shape = MSShapeGroup.shapeWithBezierPath(path);
+var border = shape.style().borders().addNewStylePart();
+border.color = MSColor.colorWithSVGString("#dd0000");
+border.thickness = 2;
+
+doc.currentPage().addLayers([shape]);
+```
+
+The same way, you can easily create a multi segment line using methods provided by [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class. Whenever you add more than two points into the path, Sketch treats such shape as a vector path similar to what can be created using standard `V - Vector` tool.
+
+The following example demonstrates how to create a curved path with four points:
+```JavaScript
+var path = NSBezierPath.bezierPath();
+path.moveToPoint(NSMakePoint(84.5,161));
+[path curveToPoint:NSMakePoint(166,79.5) controlPoint1:NSMakePoint(129.5,161) controlPoint2:NSMakePoint(166,124.5)];
+[path curveToPoint:NSMakePoint(84.5,-2) controlPoint1:NSMakePoint(166,34.5) controlPoint2:NSMakePoint(129.5,-2)];
+[path curveToPoint:NSMakePoint(3,79.5) controlPoint1:NSMakePoint(39.5,-2) controlPoint2:NSMakePoint(3,34.5)];
+
+var shape = MSShapeGroup.shapeWithBezierPath(path);
+var border = shape.style().borders().addNewStylePart();
+border.color = MSColor.colorWithSVGString("#dd0000");
+border.thickness = 2;
+
+doc.currentPage().addLayers([shape]);
+```
+
+Complete examples:
+- [Create Line Shape.sketchplugin](./Samples/Create Line Shape.sketchplugin)
+- [Create Curved Line Shape.sketchplugin](./Samples/Create Curved Line Shape.sketchplugin)
+
+Works in:
+- Sketch 3.2 +
+
 ## Set Border Radius for Specific Corners
 
 Starting from version 3.2 Sketch allows to set custom border radius for specific corner of rectangle shape. It was possible prior to 3.2, but there was no direct API.
