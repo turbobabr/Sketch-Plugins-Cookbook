@@ -5,6 +5,40 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Create Custom Shape
+
+To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class and draw whatever shape or combination of shapes you want to. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
+
+![Create Custom Shape](./docs/craete_custom_shape.png)
+
+This technique is very similar to creation of custom paths described in previous recipe. The only difference is that you have to close the path before converting it to the shape group.
+
+The following example create a simple arrow shape:
+```JavaScript
+var path = NSBezierPath.bezierPath();
+path.moveToPoint(NSMakePoint(10,10));
+path.lineToPoint(NSMakePoint(100,10));
+path.lineToPoint(NSMakePoint(100,0));
+path.lineToPoint(NSMakePoint(120,15));
+path.lineToPoint(NSMakePoint(100,30));
+path.lineToPoint(NSMakePoint(100,20));
+path.lineToPoint(NSMakePoint(10,20));
+path.closePath();
+
+var shape = MSShapeGroup.shapeWithBezierPath(path);
+var fill = shape.style().fills().addNewStylePart();
+fill.color = MSColor.colorWithSVGString("#dd0000");
+
+doc.currentPage().addLayers([shape]);
+```
+
+Complete examples:
+- [Create Custom Shape.sketchplugin](./Samples/Create Custom Shape.sketchplugin)
+
+
+Works in:
+- Sketch 3.2 +
+
 ## Create Line Shape
 
 In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class and add two points to it. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
