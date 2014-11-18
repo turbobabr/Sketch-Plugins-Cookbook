@@ -9,7 +9,7 @@ I will be posting daily updates in my twitter. Follow me [@turbobabr](https://tw
 
 To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class and draw whatever shape or combination of shapes you want to. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
 
-![Create Custom Shape](./docs/craete_custom_shape.png)
+![Create Custom Shape](./docs/create_custom_shape.png)
 
 This technique is very similar to creation of custom paths described in previous recipe. The only difference is that you have to close the path before converting it to the shape group.
 
