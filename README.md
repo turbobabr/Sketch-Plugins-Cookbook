@@ -5,6 +5,32 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Center Rectangle in Canvas
+
+To center canvas on a certain point or region, you can use a handy `-(void)MSContentDrawView.centerRect:(GKRect*)rect animated:(BOOL)animated` instance method, where `rect` is a rectangle to be centered, `animated` is a flag that turns on/off animation during the scrolling process.
+
+![Create Custom Shape](./docs/center_rect.png)
+
+The origin and size of the rectangle you provide to this method should be in absolute coordinates.
+
+The following example centers viewport by `x:200,y:200` point:
+```JavaScript
+var view=doc.currentView();
+var rect=GKRect.rectWithRect(NSMakeRect(200,200,1,1));
+view.centerRect_animated(rect,true);
+```
+The example below shows how to center a first selected layer using the same method:
+```JavaScript
+var layer = selection.firstObject();
+if(layer) {
+    var view=doc.currentView();
+    view.centerRect_animated(layer.absoluteRect(),true);
+}
+```
+
+Works in:
+- Sketch 3.1 +
+
 ## Create Custom Shape
 
 To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class and draw whatever shape or combination of shapes you want to. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
