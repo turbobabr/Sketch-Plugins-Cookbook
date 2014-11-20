@@ -5,6 +5,31 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Play Sound
+
+Usually sounds bound to commands are annoying and useless, but sometimes they are very helpful when used with care.
+Since Sketch plugins have access to all the APIs of [AppKit Framework](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/ObjC_classic/index.html#//apple_ref/doc/uid/20001093), we are able to do really crazy & cool things with plugins.. for example play a `bump!` sound when plugin shows an error message using `-MSDocument.displayMessage:` method to make the message more noticeable to the user.
+
+![Play Sound](./docs/play_sound.png)
+
+To play a sound we can use a simple interface of [NSSound](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSSound_Class/index.html) class. Here is the example how to use it:
+```JavaScript
+var filePath = sketch.scriptPath.stringByDeletingLastPathComponent()+"/assets/glass.aiff";
+
+var sound = NSSound.alloc().initWithContentsOfFile_byReference(filePath,true);
+doc.displayMessage("I'm Mr Meeseeks LOOK AT ME! :)")
+sound.play();
+```
+
+> IMPORTANT NOTE: If you want to play audio files located outside of the plugins folder in MAS version of Sketch App, you have to use [sketch-sandbox](https://github.com/bomberstudios/sketch-sandbox) library to authorize access to the files, since this version of Sketch is sandboxed and prohibits access to files located outside of the sandbox.
+
+Complete examples:
+- [Play Sound.sketchplugin](./Samples/Play Sound.sketchplugin)
+
+
+Works in:
+- Sketch 3.0 +
+
 ## Center Rectangle in Canvas
 
 To center canvas on a certain point or region, you can use a handy `-(void)MSContentDrawView.centerRect:(GKRect*)rect animated:(BOOL)animated` instance method, where `rect` is a rectangle to be centered, `animated` is a flag that turns on/off animation during the scrolling process.

@@ -1,0 +1,10 @@
+(function(){
+
+    var filePath = sketch.scriptPath.stringByDeletingLastPathComponent()+"/assets/glass.aiff";
+
+    var sound = NSSound.alloc().initWithContentsOfFile_byReference(filePath,true);
+    doc.displayMessage("I'm Mr Meeseeks LOOK AT ME! :)")
+    sound.play();
+
+})();
+
