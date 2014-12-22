@@ -5,7 +5,7 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
-## CocoaScript: Don't use '===' & '!==' operators
+## CocoaScript: Don't use '===' operator
 
 At first glance CocoaScript seems to be a just fancy name for JavaScript with some syntactic sugar, but in reality many things work differently and it's better to know them.
 
