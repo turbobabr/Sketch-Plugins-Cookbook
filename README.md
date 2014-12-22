@@ -5,6 +5,67 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## CocoaScript: Don't use '===' & '!==' operators
+
+At first glance CocoaScript seems to be a just fancy name for JavaScript with some syntactic sugar, but in reality many things work differently and it's better to know them.
+
+![Don't use strict equal operator](./docs/cocoascript_do_not_use_scrict_equal_operator.png)
+
+One of the caveats are `===` and `!==` operators best known as `strict equality` and `strict not equal`. The very brief suggestion about them is **AVOID USING THEM AT ANY COST IN SKETCH PLUGINS!**.
+
+To understand the problem, try to run the following script:
+```JavaScript
+var strA = "hello!";
+var strB = @"hello!";
+
+if(strA == strB) {
+    print("They are EQUAL!");
+} else {
+    print("NOT EQUAL!")
+}
+// -> "They are EQUAL!"
+
+if(strA === strB) {
+    print("They are EQUAL!");
+} else {
+    print("NOT EQUAL!")
+}
+// -> "NOT EQUAL!"
+```
+
+It will produce `true` for `==` operator and `false` for `===`. The string values are equal, both are assigned with `"hello!"` string but their types are different. Now run this script to check their types:
+```JavaScript
+function typeOf(obj) {
+    print(toString.call(obj));
+}
+
+var strA = "hello!";
+var strB = @"hello!";
+
+typeOf(strA);
+// -> [object String]
+
+typeOf(strB);
+// -> [object MOBoxedObject]
+```
+
+As you can see, variables `strA` & `strB` are of different types. `strA` is a JavaScript string, but `strB` is a mysterious 'MOBoxedObject'. The problem is in definition of `strB` - `@"hello!"` is equal to `NSString.stringWithString("hello!")` and it produces boxed instance of NSString class instead of JS string.
+
+When developing Sketch plugins, you usually deal with the data that is produced on `Sketch Runtime` side. And most of the property getters and class methods return boxed Objective-C objects instead of native JS objects.  To demonstrate a real world problem you can easily encounter with: (1) Create a rectangle shape, (2) Select it, (3) Run the following script:
+```JavaScript
+var layer=selection.firstObject();
+if(layer) {
+    print(layer.name());
+    // -> Rectangle 1
+
+    var isNameEqual = layer.name() === "Rectangle 1";
+    print(isNameEqual);
+    // -> false
+}
+```
+
+> Note: The usage of `===` and `!==` isn't forbidden, you can use them whenever you want to, but always pay attention to types of variables you compare. It's especially important when you try to port an existing JavaScript library or framework to CocoaScript. But anyway, I insist to forget strict equal/not equal operators and use '==' and '!=' + manual type check if needed.
+
 ## Play Sound
 
 Usually sounds bound to commands are annoying and useless, but sometimes they are very helpful when used with care.
