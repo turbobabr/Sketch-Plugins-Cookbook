@@ -11,7 +11,8 @@ At first glance CocoaScript seems to be a just fancy name for JavaScript with so
 
 ![Don't use strict equal operator](./docs/cocoascript_do_not_use_scrict_equal_operator.png)
 
-One of the caveats are `===` and `!==` operators best known as `strict equality` and `strict not equal`. The very brief suggestion about them is **AVOID USING THEM AT ANY COST IN SKETCH PLUGINS!**.
+One of the caveats are `===` and `!==` operators best known as `strict equality` and `strict not equal`. The very brief suggestion about them is:
+- **AVOID USING THEM AT ANY COST IN SKETCH PLUGINS!**
 
 To understand the problem, try to run the following script:
 ```JavaScript
@@ -49,9 +50,11 @@ typeOf(strB);
 // -> [object MOBoxedObject]
 ```
 
-As you can see, variables `strA` & `strB` are of different types. `strA` is a JavaScript string, but `strB` is a mysterious 'MOBoxedObject'. The problem is in definition of `strB` - `@"hello!"` is equal to `NSString.stringWithString("hello!")` and it produces boxed instance of NSString class instead of JS string.
+As you can see, variables `strA` & `strB` are of different types. `strA` is a JavaScript string, but `strB` is a mysterious `MOBoxedObject`. The problem is in definition of `strB` - `@"hello!"` is equal to `NSString.stringWithString("hello!")` and it produces boxed instance of NSString class instead of JS string.
 
-When developing Sketch plugins, you usually deal with the data that is produced on `Sketch Runtime` side. And most of the property getters and class methods return boxed Objective-C objects instead of native JS objects.  To demonstrate a real world problem you can easily encounter with: (1) Create a rectangle shape, (2) Select it, (3) Run the following script:
+When developing Sketch plugins, you usually deal with the data that is produced on `Sketch Runtime` side. And most of the property getters and class methods return boxed Objective-C objects instead of native JS objects.
+
+To demonstrate a real world problem you can easily encounter with: (1) Create a rectangle shape, (2) Select it, (3) Run the following script:
 ```JavaScript
 var layer=selection.firstObject();
 if(layer) {
