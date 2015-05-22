@@ -290,7 +290,7 @@ The following sample demonstrates how to do it:
 var ovalShape = MSOvalShape.alloc().init();
 ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
 
-var shapeGroup=ovalShape.embedInShapeGroup();
+var shapeGroup=MSShapeGroup.shapeWithPath(ovalShape);
 var fill = shapeGroup.style().fills().addNewStylePart();
 fill.color = MSColor.colorWithSVGString("#dd2020");
 

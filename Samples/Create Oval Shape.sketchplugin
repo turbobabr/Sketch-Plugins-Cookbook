@@ -5,7 +5,7 @@
     ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
 
     // Wrap it with MSShapeGroup and set simple fill style.
-    var shapeGroup=ovalShape.embedInShapeGroup();
+    var shapeGroup=MSShapeGroup.shapeWithPath(ovalShape);
     var fill = shapeGroup.style().fills().addNewStylePart();
     fill.color = MSColor.colorWithSVGString("#dd2020");
 
