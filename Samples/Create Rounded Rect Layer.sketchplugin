@@ -1,29 +1,14 @@
 (function(){
 
-    var parent = doc.currentPage();
-    var rectLayer=parent.addLayerOfType("rectangle");
-
-    rectLayer.frame = MSRect.rectWithRect(NSMakeRect(10,10,360,240));
-    rectLayer.cornerRadiusFloat = 25;
-
-    var shapeGroup=MSShapeGroup.shapeWithPath(rectLayer);
-    var fill=shapeGroup.style().fills().addNewStylePart();
-    fill.color=MSColor.colorWithSVGString("#dd0000");
-
-    doc.currentPage().selectLayers([shapeGroup]);
-
-})();
-
-(function(){
-
     // Create rectangle object
-    var ovalShape = MSOvalShape.alloc().init();
-    ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
+    var rectShape = MSRectangleShape.alloc().init();
+    rectShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
+rectShape.cornerRadiusFloat = 25;
 
     // Wrap it with MSShapeGroup and set simple fill style.
-    var shapeGroup=MSShapeGroup.shapeWithPath(ovalShape);
+    var shapeGroup=MSShapeGroup.shapeWithPath(rectShape);
     var fill = shapeGroup.style().fills().addNewStylePart();
-    fill.color = MSColor.colorWithSVGString("#dd2020");
+    fill.color = MSColor.colorWithSVGString("#dd0000");
 
     shapeGroup.frame().constrainProportions = false; // Set to `true` if you want shape to be constrained.
 
