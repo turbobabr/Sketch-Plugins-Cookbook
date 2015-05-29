@@ -430,6 +430,7 @@ function convertToOutlines(layer) {
     return shape;
 }
 
+var selection = context.selection;
 var layer=selection.firstObject();
 if(layer) {
     var vectorizedTextLayer=convertToOutlines(layer);
