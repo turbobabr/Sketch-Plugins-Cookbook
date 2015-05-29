@@ -364,6 +364,8 @@ Works in:
 
 ## Flatten Vector Layer
 
+### Note: This example currently doesn't work in Sketch 3.3 
+
 If you want to flatten a complex vector layer that contains several sub paths combined using different boolean operations into single layer, you can use `+MSShapeGroup.flatten` method.
 
 ![Flatten Vector Shape](./docs/flatten_vector_shape.png)
