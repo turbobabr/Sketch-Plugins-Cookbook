@@ -241,6 +241,7 @@ This method produces the same result as a standard [Scale](http://bohemiancoding
 
 The following sample demonstrates how to scale first selected layer:
 ```JavaScript
+var selection = context.selection;
 var layer = selection.firstObject();
 if(layer) {
     // Preserve layer center point.
