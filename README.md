@@ -314,6 +314,8 @@ You can create a shared style from the existing style that is bound to some laye
 
 Create shared style from selected layers' style:
 ```JavaScript
+var selection = context.selection;
+var doc = context.document;
 var layer=selection.firstObject();
 if(layer) {
     var sharedStyles=doc.documentData().layerStyles();
@@ -323,6 +325,7 @@ if(layer) {
 
 Create shared style from scratch:
 ```JavaScript
+var doc = context.document;
 var sharedStyles=doc.documentData().layerStyles();
 
 var style=MSStyle.alloc().init();
