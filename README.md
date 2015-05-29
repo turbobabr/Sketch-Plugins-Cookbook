@@ -213,6 +213,7 @@ In order to set custom radiuses you use `-MSRectangleShape.setCornerRadiusFromCo
 
 The following sample sets left-top and right-top corners of a selected rect shape to 15 points:
 ```JavaScript
+var selection = context.selection;
 var layer = selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
     var shape=layer.layers().firstObject();
