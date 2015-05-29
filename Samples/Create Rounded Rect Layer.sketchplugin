@@ -1,15 +1,17 @@
 (function(){
 
-    var parent = doc.currentPage();
-    var rectLayer=parent.addLayerOfType("rectangle");
+    // Create rectangle object
+    var rectShape = MSRectangleShape.alloc().init();
+    rectShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
+rectShape.cornerRadiusFloat = 25;
 
-    rectLayer.frame = MSRect.rectWithRect(NSMakeRect(10,10,360,240));
-    rectLayer.cornerRadiusFloat = 25;
+    // Wrap it with MSShapeGroup and set simple fill style.
+    var shapeGroup=MSShapeGroup.shapeWithPath(rectShape);
+    var fill = shapeGroup.style().fills().addNewStylePart();
+    fill.color = MSColor.colorWithSVGString("#dd0000");
 
-    var shapeGroup=rectLayer.embedInShapeGroup();
-    var fill=shapeGroup.style().fills().addNewStylePart();
-    fill.color=MSColor.colorWithSVGString("#dd0000");
+    shapeGroup.frame().constrainProportions = false; // Set to `true` if you want shape to be constrained.
 
-    doc.currentPage().selectLayers([shapeGroup]);
-
+    // Add created shape group to the current page.
+    doc.currentPage().addLayers([shapeGroup]);
 })();
