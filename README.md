@@ -452,6 +452,7 @@ This method accepts a `double` value that represents a position on path at which
 
 The following example divides shape path into 15 segments and prints out their points coordinates:
 ```JavaScript
+var selection = context.selection;
 var layer=selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
 
