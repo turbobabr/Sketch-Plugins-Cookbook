@@ -288,6 +288,7 @@ In order to create an oval shape programmatically, you have to create an instanc
 
 The following sample demonstrates how to do it:
 ```JavaScript
+var doc = context.document;
 var ovalShape = MSOvalShape.alloc().init();
 ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
 
