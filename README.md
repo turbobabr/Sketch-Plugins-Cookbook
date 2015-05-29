@@ -166,6 +166,8 @@ To make Sketch recognize the provided path as a line shape, you have to add only
 
 The following example creates a simple line shape with two points:
 ```JavaScript
+var doc = context.document;
+
 var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(10,10));
 path.lineToPoint(NSMakePoint(200,200));
@@ -182,6 +184,8 @@ The same way, you can easily create a multi segment line using methods provided 
 
 The following example demonstrates how to create a curved path with four points:
 ```JavaScript
+var doc = context.document;
+
 var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(84.5,161));
 [path curveToPoint:NSMakePoint(166,79.5) controlPoint1:NSMakePoint(129.5,161) controlPoint2:NSMakePoint(166,124.5)];
