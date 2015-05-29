@@ -364,14 +364,13 @@ Works in:
 
 ## Flatten Vector Layer
 
-### Note: This example currently doesn't work in Sketch 3.3 
-
 If you want to flatten a complex vector layer that contains several sub paths combined using different boolean operations into single layer, you can use `+MSShapeGroup.flatten` method.
 
 ![Flatten Vector Shape](./docs/flatten_vector_shape.png)
 
 This sample code flattens a first selected vector layer:
 ```JavaScript
+var selection = context.selection;
 var layer=selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
     layer.flatten();
@@ -385,6 +384,8 @@ Works in:
 - Sketch 3.2 +
 
 ## Flatten Layers to Bitmap
+
+### Note: This example currently doesn't work in Sketch 3.3 
 
 In order to flatten one or several layers of any type to a single `MSBitmapLayer`, use `-MSLayerFlattener.flattenLayers:` method. It accepts one arguments which is an array of layers to be flattened.
 
