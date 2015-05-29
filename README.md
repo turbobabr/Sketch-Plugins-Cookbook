@@ -261,24 +261,23 @@ Works in:
 
 ## Finding Bounds For a Set of Layers
 
-If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(GKRect*)MSLayerGroup.groupBoundsForLayers:(NSArray*)layers`. It accepts a list of layers and returns an instance of [GKRect](https://github.com/BohemianCoding/GeometryKit/blob/c738cdec6196230eada5925ebc19fe42bc1205f5/Source/GKRect.h) class which is the part of open source [GeometryKit](https://github.com/BohemianCoding/GeometryKit) by Bohemian Coding that is widely used in Sketch App.
+If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(CGRect)MSLayerGroup.groupBoundsForLayers:(NSArray*)layers`. It accepts a list of layers and returns CGRect structure.
 
 ![Scaling Layers](./docs/find_selection_bounds.png)
 
 A quick sample that demonstrate how to use it:
 ```JavaScript
+var selection = context.selection;
 var bounds=MSLayerGroup.groupBoundsForLayers(selection);
 
-print("x: "+bounds.x());
-print("y: "+bounds.y());
-print("width: "+bounds.width());
-print("height: "+bounds.height());
-print("mixX: "+bounds.midX());
-print("mixX: "+bounds.midY());
+print("x: "+bounds.origin.x);
+print("y: "+bounds.origin.y);
+print("width: "+bounds.size.width);
+print("height: "+bounds.size.height);
 ```
 
 Works in:
-- Sketch 3.1 +
+- Sketch 3.3 +
 
 ## Create Oval Shape
 
