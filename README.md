@@ -131,6 +131,7 @@ This technique is very similar to creation of custom paths described in previous
 
 The following example create a simple arrow shape:
 ```JavaScript
+var doc = context.document;
 var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(10,10));
 path.lineToPoint(NSMakePoint(100,10));
