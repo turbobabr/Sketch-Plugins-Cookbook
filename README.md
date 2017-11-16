@@ -138,9 +138,9 @@ if(layer) {
 }
 ```
 
-## Create Custom Shape
+## Creating Custom Shape
 
-To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class and draw whatever shape or combination of shapes you want to. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
+To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and draw whatever shape or combination of shapes you want to. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
 
 ![Create Custom Shape](./docs/create_custom_shape.png)
 
@@ -148,7 +148,7 @@ This technique is very similar to creation of custom paths described in previous
 
 The following example create a simple arrow shape:
 ```JavaScript
-var doc = context.document;
+// All coordinates are provided in pixels
 var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(10,10));
 path.lineToPoint(NSMakePoint(100,10));
@@ -160,15 +160,17 @@ path.lineToPoint(NSMakePoint(10,20));
 path.closePath();
 
 var shape = MSShapeGroup.shapeWithBezierPath(path);
-var fill = shape.style().fills().addNewStylePart();
-fill.color = MSColor.colorWithSVGString("#dd0000");
+var fill = shape.style().addStylePartOfType(0); // `0` constant indicates that we need a `fill` part to be created
+fill.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 
-doc.currentPage().addLayers([shape]);
+var documentData = context.document.documentData();
+var currentParentGroup = documentData.currentPage().currentArtboard() || documentData.currentPage()
+currentParentGroup.addLayers([shape]);
 ```
 
 ## Create Line Shape
 
-In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class and add two points to it. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
+In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and add two points to it. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
 
 ![Create Line Shape](./docs/create_line_shape.png)
 
@@ -176,26 +178,22 @@ To make Sketch recognize the provided path as a line shape, you have to add only
 
 The following example creates a simple line shape with two points:
 ```JavaScript
-var doc = context.document;
-
 var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(10,10));
 path.lineToPoint(NSMakePoint(200,200));
 
 var shape = MSShapeGroup.shapeWithBezierPath(path);
-var border = shape.style().borders().addNewStylePart();
-border.color = MSColor.colorWithSVGString("#dd0000");
-border.thickness = 2;
+var border = shape.style().addStylePartOfType(1);
+border.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
+border.thickness = 3;
 
-doc.currentPage().addLayers([shape]);
+context.document.currentPage().addLayers([shape]);
 ```
 
-The same way, you can easily create a multi segment line using methods provided by [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class. Whenever you add more than two points into the path, Sketch treats such shape as a vector path similar to what can be created using standard `V - Vector` tool.
+The same way, you can easily create a multi segment line using methods provided by [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class. Whenever you add more than two points into the path, Sketch treats such shape as a vector path similar to what can be created using standard `V - Vector` tool.
 
 The following example demonstrates how to create a curved path with four points:
 ```JavaScript
-var doc = context.document;
-
 var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(84.5,161));
 [path curveToPoint:NSMakePoint(166,79.5) controlPoint1:NSMakePoint(129.5,161) controlPoint2:NSMakePoint(166,124.5)];
@@ -203,29 +201,28 @@ path.moveToPoint(NSMakePoint(84.5,161));
 [path curveToPoint:NSMakePoint(3,79.5) controlPoint1:NSMakePoint(39.5,-2) controlPoint2:NSMakePoint(3,34.5)];
 
 var shape = MSShapeGroup.shapeWithBezierPath(path);
-var border = shape.style().borders().addNewStylePart();
-border.color = MSColor.colorWithSVGString("#dd0000");
+var border = shape.style().addStylePartOfType(1);
+border.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 border.thickness = 2;
 
-doc.currentPage().addLayers([shape]);
+context.document.currentPage().addLayers([shape]);
 ```
 
-## Set Border Radius for Specific Corners
+## Setting Border Radius for Specific Corners
 
 Starting from version 3.2 Sketch allows to set custom border radius for specific corner of rectangle shape. It was possible prior to 3.2, but there was no direct API.
 
 ![Set Custom Border Radius](./docs/set_custom_border_radius_for_specific_corner.png)
 
-In order to set custom radiuses you use `-MSRectangleShape.setCornerRadiusFromComponents:(NSString*)compoents` instance method, where `components` is a string that represents radius values for every corner separated by `/` sybmols. The sequence is following: `left-top/right-top/right-bottom/left-bottom`.
+In order to set custom radiuses you use `-MSRectangleShape.setCornerRadiusFromComponents:(NSString*)compoents` instance method, where `components` is a string that represents radius values for every corner separated by `;` character. The sequence is following: `top-left/top-right/bottom-right/bottom-left`.
 
 The following sample sets left-top and right-top corners of a selected rect shape to 15 points:
 ```JavaScript
-var selection = context.selection;
-var layer = selection.firstObject();
+var layer = context.selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
     var shape=layer.layers().firstObject();
     if(shape && shape.isKindOfClass(MSRectangleShape)) {
-        shape.setCornerRadiusFromComponents("15/15/0/0");
+        shape.setCornerRadiusFromComponents("15;15;0;20");
     }
 }
 ```
@@ -243,8 +240,7 @@ This method produces the same result as a standard [Scale](http://bohemiancoding
 
 The following sample demonstrates how to scale first selected layer:
 ```JavaScript
-var selection = context.selection;
-var layer = selection.firstObject();
+var layer = context.selection.firstObject()
 if(layer) {
     // Preserve layer center point.
     var midX=layer.frame().midX();
@@ -261,14 +257,14 @@ if(layer) {
 
 ## Finding Bounds For a Set of Layers
 
-If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(CGRect)MSLayerGroup.groupBoundsForLayers:(NSArray*)layers`. It accepts a list of layers and returns CGRect structure.
+If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(CGRect)MSLayerGroup.groupBoundsForContainer:(MSLayerArray*)container`. It accepts an instance of `MSLayerArray` class, that represents a list of layers.
 
 ![Scaling Layers](./docs/find_selection_bounds.png)
 
 A quick sample that demonstrate how to use it:
 ```JavaScript
 var selection = context.selection;
-var bounds=MSLayerGroup.groupBoundsForLayers(selection);
+var bounds= MSLayerGroup.groupBoundsForContainer(MSLayerArray.arrayWithLayers(selection));
 
 print("x: "+bounds.origin.x);
 print("y: "+bounds.origin.y);
@@ -284,15 +280,14 @@ In order to create an oval shape programmatically, you have to create an instanc
 
 The following sample demonstrates how to do it:
 ```JavaScript
-var doc = context.document;
 var ovalShape = MSOvalShape.alloc().init();
 ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
 
 var shapeGroup=MSShapeGroup.shapeWithPath(ovalShape);
-var fill = shapeGroup.style().fills().addNewStylePart();
-fill.color = MSColor.colorWithSVGString("#dd2020");
+var fill = shapeGroup.style().addStylePartOfType(0);
+fill.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 
-doc.currentPage().addLayers([shapeGroup]);
+context.document.currentPage().addLayers([shapeGroup]);
 ```
 
 ## Create Shared Style Programmatically
