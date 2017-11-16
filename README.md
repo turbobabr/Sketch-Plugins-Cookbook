@@ -5,6 +5,47 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Working with Constraints
+
+All edge constraints are always anchored to a parent group (e.g, artboard, symbol or layer group) of the layer:
+
+![Controlling properties](./docs/constraints-and-anchors.png)
+
+To control certain constraints, `MSLayer` class has a bunch of get/set properties named `hasFixed[Edge/Size]` that allow to get and update information about constraints for a given layer:
+
+![Controlling properties](./docs/constraining-props.png)
+
+Checking current constraints:
+```JavaScript
+var layer = context.selection.firstObject();
+if(layer) {
+    // Edges
+    print("left:" + layer.hasFixedLeft())
+    print("top:" + layer.hasFixedTop())
+    print("right:" + layer.hasFixedRight())
+    print("bottom:" + layer.hasFixedBottom())
+
+    // Size
+    print("height:" + layer.hasFixedWidth())
+    print("width:" + layer.hasFixedHeight())
+}
+```
+
+Setting all edge constraints to `fixed`:
+```JavaScript
+var layer = context.selection.firstObject();
+if(layer) {
+    layer.hasFixedHeight = false;
+    layer.hasFixedWidth = false;
+
+    layer.hasFixedLeft = true;
+    layer.hasFixedTop = true;
+    layer.hasFixedRight = true;
+    layer.hasFixedBottom = true;
+}
+```
+
+
 ## CocoaScript: Don't use '===' operator
 
 At first glance CocoaScript seems to be a just fancy name for JavaScript with some syntactic sugar, but in reality many things work differently and it's better to know them.
