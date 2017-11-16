@@ -356,18 +356,16 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
 }
 ```
 
-## Flatten Layers to Bitmap
+## Flattening Layers to Bitmap
 
-### Note: This example currently doesn't work in Sketch 3.3 
-
-In order to flatten one or several layers of any type to a single `MSBitmapLayer`, use `-MSLayerFlattener.flattenLayers:` method. It accepts one arguments which is an array of layers to be flattened.
+In order to flatten one or several layers of any type to a single `MSBitmapLayer`, use `-MSLayerFlattener.flattenLayers:` method. It accepts one arguments which is a container of layers to be flattened.
 
 ![Flatten Layers to Bitmap](./docs/flatten_layers_to_bitmap.png)
 
 The following example flattens all the selected layers to a bitmap layer:
 ```JavaScript
 var flattener = MSLayerFlattener.alloc().init();
-flattener.flattenLayers(selection);
+flattener.flattenLayers(MSLayerArray.arrayWithLayers(context.selection));
 ```
 
 ## Converting Text Layer to Vector
