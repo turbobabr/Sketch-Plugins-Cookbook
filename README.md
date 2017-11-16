@@ -69,35 +69,56 @@ if(layer) {
 
 > Note: The usage of `===` and `!==` isn't forbidden, you can use them whenever you want to, but always pay attention to types of variables you compare. It's especially important when you try to port an existing JavaScript library or framework to CocoaScript. But anyway, I insist to forget strict equal/not equal operators and use '==' and '!=' + manual type check if needed.
 
-## Play Sound
+## Playing Sounds
 
 Usually sounds bound to commands are annoying and useless, but sometimes they are very helpful when used with care.
 
 ![Play Sound](./docs/play_sound.png)
 
-Since Sketch plugins have access to all the APIs of [AppKit Framework](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/ObjC_classic/index.html#//apple_ref/doc/uid/20001093), we are able to do really crazy & cool things with plugins.. for example play a `bump!` sound when plugin shows an error message using `-MSDocument.displayMessage:` method to make the message more noticeable to the user.
+Since Sketch plugins have access to all the APIs of [AppKit Framework](https://developer.apple.com/documentation/appkit?language=objc), we are able to do really crazy & cool things with plugins.. for example play a `beep!` sound when plugin shows an error message using `-MSDocument.showMessage:` method to make the message more noticeable to a user.
 
-To play a sound we can use a simple interface of [NSSound](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSSound_Class/index.html) class. Here is the example how to use it:
+Here is how we can play `beep` sound to indicate some sort of error:
 ```JavaScript
-var filePath = sketch.scriptPath.stringByDeletingLastPathComponent()+"/assets/glass.aiff";
+context.document.showMessage("Hey! We have a problem!")
+NSBeep()
+```
+
+To play a custom audio file we can use a simple interface of [NSSound](https://developer.apple.com/documentation/appkit/nssound?language=objc) class. Here is the sample code how to use it:
+```JavaScript
+var filePath = "/System/Library/Sounds/Pop.aiff"
 
 var sound = NSSound.alloc().initWithContentsOfFile_byReference(filePath,true);
-doc.displayMessage("I'm Mr Meeseeks LOOK AT ME! :)")
 sound.play();
 ```
 
-> IMPORTANT NOTE: If you want to play audio files located outside of the plugins folder in MAS version of Sketch App, you have to use [sketch-sandbox](https://github.com/bomberstudios/sketch-sandbox) library to authorize access to the files, since this version of Sketch is sandboxed and prohibits access to files located outside of the sandbox.
-
-Complete examples:
-- [Play Sound.sketchplugin](./Samples/Play Sound.sketchplugin)
 
 
-Works in:
-- Sketch 3.0 +
+Alternatively, you can play any system sound using a handy [+NSSound.soundNamed:](https://developer.apple.com/documentation/appkit/nssound/1477318-soundnamed?language=objc) class method:
+```JavaScript
+const SystemSounds = {
+  Basso: "Basso",
+  Blow: "Blow",
+  Bottle: "Bottle",
+  Frog: "Frog",
+  Funk: "Funk",
+  Glass: "Glass",
+  Hero: "Hero",
+  Morse: "Morse",
+  Ping: "Ping",
+  Pop: "Pop",
+  Purr: "Purr",
+  Sosumi: "Sosumi",
+  Submarine: "Submarine",
+  Tink: "Tink"
+};
 
-## Center Rectangle in Canvas
+var sound = NSSound.soundNamed(SystemSounds.Glass)
+sound.play()
+```
 
-To center canvas on a certain point or region, you can use a handy `-(void)MSContentDrawView.centerRect:(GKRect*)rect animated:(BOOL)animated` instance method, where `rect` is a rectangle to be centered, `animated` is a flag that turns on/off animation during the scrolling process.
+## Centering Rectangle on Canvas
+
+To center canvas on a certain point or region, you can use a handy `-(void)MSContentDrawView.centerRect:(CGRect)rect animated:(BOOL)animated` instance method, where `rect` is a rectangle to be centered, `animated` is a flag that turns on/off animation during the scrolling process.
 
 ![Create Custom Shape](./docs/center_rect.png)
 
@@ -105,25 +126,21 @@ The origin and size of the rectangle you provide to this method should be in abs
 
 The following example centers viewport by `x:200,y:200` point:
 ```JavaScript
-var view=doc.currentView();
-var rect=GKRect.rectWithRect(NSMakeRect(200,200,1,1));
-view.centerRect_animated(rect,true);
+var canvasView = context.document.currentView(); // Getting canvas view
+canvasView.centerRect_animated(CGRectMake(200,200,1,1),true);
 ```
-The example below shows how to center a first selected layer using the same method:
+The example below shows how to center on the first selected layer using the same method without animation:
 ```JavaScript
-var layer = selection.firstObject();
+var layer = context.selection.firstObject()
 if(layer) {
-    var view=doc.currentView();
-    view.centerRect_animated(layer.absoluteRect(),true);
+    var view = context.document.currentView();
+    view.centerRect_animated(layer.absoluteRect().rect(),false);
 }
 ```
 
-Works in:
-- Sketch 3.1 +
+## Creating Custom Shape
 
-## Create Custom Shape
-
-To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class and draw whatever shape or combination of shapes you want to. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
+To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and draw whatever shape or combination of shapes you want to. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
 
 ![Create Custom Shape](./docs/create_custom_shape.png)
 
@@ -131,7 +148,7 @@ This technique is very similar to creation of custom paths described in previous
 
 The following example create a simple arrow shape:
 ```JavaScript
-var doc = context.document;
+// All coordinates are provided in pixels
 var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(10,10));
 path.lineToPoint(NSMakePoint(100,10));
@@ -143,22 +160,17 @@ path.lineToPoint(NSMakePoint(10,20));
 path.closePath();
 
 var shape = MSShapeGroup.shapeWithBezierPath(path);
-var fill = shape.style().fills().addNewStylePart();
-fill.color = MSColor.colorWithSVGString("#dd0000");
+var fill = shape.style().addStylePartOfType(0); // `0` constant indicates that we need a `fill` part to be created
+fill.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 
-doc.currentPage().addLayers([shape]);
+var documentData = context.document.documentData();
+var currentParentGroup = documentData.currentPage().currentArtboard() || documentData.currentPage()
+currentParentGroup.addLayers([shape]);
 ```
-
-Complete examples:
-- [Create Custom Shape.sketchplugin](./Samples/Create Custom Shape.sketchplugin)
-
-
-Works in:
-- Sketch 3.2 +
 
 ## Create Line Shape
 
-In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class and add two points to it. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
+In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and add two points to it. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
 
 ![Create Line Shape](./docs/create_line_shape.png)
 
@@ -166,26 +178,22 @@ To make Sketch recognize the provided path as a line shape, you have to add only
 
 The following example creates a simple line shape with two points:
 ```JavaScript
-var doc = context.document;
-
 var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(10,10));
 path.lineToPoint(NSMakePoint(200,200));
 
 var shape = MSShapeGroup.shapeWithBezierPath(path);
-var border = shape.style().borders().addNewStylePart();
-border.color = MSColor.colorWithSVGString("#dd0000");
-border.thickness = 2;
+var border = shape.style().addStylePartOfType(1);
+border.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
+border.thickness = 3;
 
-doc.currentPage().addLayers([shape]);
+context.document.currentPage().addLayers([shape]);
 ```
 
-The same way, you can easily create a multi segment line using methods provided by [NSBezierPath](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/index.html) class. Whenever you add more than two points into the path, Sketch treats such shape as a vector path similar to what can be created using standard `V - Vector` tool.
+The same way, you can easily create a multi segment line using methods provided by [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class. Whenever you add more than two points into the path, Sketch treats such shape as a vector path similar to what can be created using standard `V - Vector` tool.
 
 The following example demonstrates how to create a curved path with four points:
 ```JavaScript
-var doc = context.document;
-
 var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(84.5,161));
 [path curveToPoint:NSMakePoint(166,79.5) controlPoint1:NSMakePoint(129.5,161) controlPoint2:NSMakePoint(166,124.5)];
@@ -193,45 +201,31 @@ path.moveToPoint(NSMakePoint(84.5,161));
 [path curveToPoint:NSMakePoint(3,79.5) controlPoint1:NSMakePoint(39.5,-2) controlPoint2:NSMakePoint(3,34.5)];
 
 var shape = MSShapeGroup.shapeWithBezierPath(path);
-var border = shape.style().borders().addNewStylePart();
-border.color = MSColor.colorWithSVGString("#dd0000");
+var border = shape.style().addStylePartOfType(1);
+border.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 border.thickness = 2;
 
-doc.currentPage().addLayers([shape]);
+context.document.currentPage().addLayers([shape]);
 ```
 
-Complete examples:
-- [Create Line Shape.sketchplugin](./Samples/Create Line Shape.sketchplugin)
-- [Create Curved Line Shape.sketchplugin](./Samples/Create Curved Line Shape.sketchplugin)
-
-Works in:
-- Sketch 3.2 +
-
-## Set Border Radius for Specific Corners
+## Setting Border Radius for Specific Corners
 
 Starting from version 3.2 Sketch allows to set custom border radius for specific corner of rectangle shape. It was possible prior to 3.2, but there was no direct API.
 
 ![Set Custom Border Radius](./docs/set_custom_border_radius_for_specific_corner.png)
 
-In order to set custom radiuses you use `-MSRectangleShape.setCornerRadiusFromComponents:(NSString*)compoents` instance method, where `components` is a string that represents radius values for every corner separated by `/` sybmols. The sequence is following: `left-top/right-top/right-bottom/left-bottom`.
+In order to set custom radiuses you use `-MSRectangleShape.setCornerRadiusFromComponents:(NSString*)compoents` instance method, where `components` is a string that represents radius values for every corner separated by `;` character. The sequence is following: `top-left/top-right/bottom-right/bottom-left`.
 
 The following sample sets left-top and right-top corners of a selected rect shape to 15 points:
 ```JavaScript
-var selection = context.selection;
-var layer = selection.firstObject();
+var layer = context.selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
     var shape=layer.layers().firstObject();
     if(shape && shape.isKindOfClass(MSRectangleShape)) {
-        shape.setCornerRadiusFromComponents("15/15/0/0");
+        shape.setCornerRadiusFromComponents("15;15;0;20");
     }
 }
 ```
-
-Complete examples:
-- [Set Border Radius From Components.sketchplugin](./Samples/Set Border Radius From Components.sketchplugin)
-
-Works in:
-- Sketch 3.2 +
 
 ## Scaling Layers
 
@@ -246,8 +240,7 @@ This method produces the same result as a standard [Scale](http://bohemiancoding
 
 The following sample demonstrates how to scale first selected layer:
 ```JavaScript
-var selection = context.selection;
-var layer = selection.firstObject();
+var layer = context.selection.firstObject()
 if(layer) {
     // Preserve layer center point.
     var midX=layer.frame().midX();
@@ -262,19 +255,16 @@ if(layer) {
 }
 ```
 
-Works in:
-- Sketch 3.1 +
-
 ## Finding Bounds For a Set of Layers
 
-If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(CGRect)MSLayerGroup.groupBoundsForLayers:(NSArray*)layers`. It accepts a list of layers and returns CGRect structure.
+If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(CGRect)MSLayerGroup.groupBoundsForContainer:(MSLayerArray*)container`. It accepts an instance of `MSLayerArray` class, that represents a list of layers.
 
 ![Scaling Layers](./docs/find_selection_bounds.png)
 
 A quick sample that demonstrate how to use it:
 ```JavaScript
 var selection = context.selection;
-var bounds=MSLayerGroup.groupBoundsForLayers(selection);
+var bounds= MSLayerGroup.groupBoundsForContainer(MSLayerArray.arrayWithLayers(selection));
 
 print("x: "+bounds.origin.x);
 print("y: "+bounds.origin.y);
@@ -282,10 +272,7 @@ print("width: "+bounds.size.width);
 print("height: "+bounds.size.height);
 ```
 
-Works in:
-- Sketch 3.3 +
-
-## Create Oval Shape
+## Creating Oval Shape
 
 In order to create an oval shape programmatically, you have to create an instance of `MSOvalShape` class, set its frame and wrap with `MSShapeGroup` container.
 
@@ -293,85 +280,63 @@ In order to create an oval shape programmatically, you have to create an instanc
 
 The following sample demonstrates how to do it:
 ```JavaScript
-var doc = context.document;
 var ovalShape = MSOvalShape.alloc().init();
 ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,100,100));
 
 var shapeGroup=MSShapeGroup.shapeWithPath(ovalShape);
-var fill = shapeGroup.style().fills().addNewStylePart();
-fill.color = MSColor.colorWithSVGString("#dd2020");
+var fill = shapeGroup.style().addStylePartOfType(0);
+fill.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 
-doc.currentPage().addLayers([shapeGroup]);
+context.document.currentPage().addLayers([shapeGroup]);
 ```
 
-Complete examples:
-- [Create Oval Shape.sketchplugin](./Samples/Create Oval Shape.sketchplugin)
 
-Works in:
-- Sketch 3.1 +
+## Creating MSColor instances from CSS color strings (hex, rgba, etc)
 
-## Create Shared Style Programmatically
+There is no way to create instance of `MSColor` model class from CSS string directly, but it's possible to do so via it's immutable counterpart class named `MSImmutableColor`. It has a class method `+MSImmutableColor.colorWithSVGString:(NSString*)string` that accepts any value supported by [CSS Color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) data type.
 
-In order to create a shared style programmatically you use `-MSSharedLayerStyleContainer.addSharedStyleWithName:(NSString*)name firstInstance:(MSStyle*)style` method, where `name` is a name of shared style being created, `style` is a reference style used as a template for future shared style.
-
-You can create a shared style from the existing style that is bound to some layer or create it from scratch with a custom `MSStyle` instance.
-
-![Create Shared Style Programmically](./docs/create_shared_style_programmatically.png)
-
-Create shared style from selected layers' style:
+Here is a super handy helper function and a bunch of calls with various supported formats of providing color as string:
 ```JavaScript
-var selection = context.selection;
-var doc = context.document;
-var layer=selection.firstObject();
+function MSColorFromString(color) {
+    return MSImmutableColor.colorWithSVGString(color).newMutableCounterpart()
+}
+
+// Hex
+MSColorFromString("#33AE15")
+MSColorFromString("#333")
+MSColorFromString("FF0000")
+MSColorFromString("#145515FF")
+
+// rgb/rgba
+MSColorFromString("rgb(255,0,0)")
+MSColorFromString("rgba(255,0,0,0.5)")
+
+// Color keywords
+MSColorFromString("red")
+MSColorFromString("blue")
+MSColorFromString("magenta")
+MSColorFromString("darkviolet")
+
+// hls
+MSColorFromString("hsl(270, 60%, 50%, .15)")
+MSColorFromString("hsl(270deg, 60%, 70%)")
+MSColorFromString("hsl(4.71239rad, 60%, 70%)")
+MSColorFromString("hsla(240, 100%, 50%, .4)")
+```
+
+The following example demonstrates how to set fill color for a selected layer using `MSColorFromString` helper function:
+```JavaScript
+function MSColorFromString(color) {
+    return MSImmutableColor.colorWithSVGString(color).newMutableCounterpart()
+}
+
+var layer = context.selection.firstObject();
 if(layer) {
-    var sharedStyles=doc.documentData().layerStyles();
-    sharedStyles.addSharedStyleWithName_firstInstance("Custom Style",layer.style());
+    layer.style().firstEnabledFill().color = MSColorFromString("#FA1010");
 }
 ```
 
-Create shared style from scratch:
-```JavaScript
-var doc = context.document;
-var sharedStyles=doc.documentData().layerStyles();
-
-var style=MSStyle.alloc().init();
-var fill=style.fills().addNewStylePart();
-fill.color = MSColor.colorWithSVGString("#B1C151");
-
-sharedStyles.addSharedStyleWithName_firstInstance("Custom Style 2",style);
-
-doc.reloadInspector();
-```
-
-Complete examples:
-- [Create Shared Style From Selected Layer.sketchplugin](./Samples/Create Shared Style From Selected Layer.sketchplugin)
-- [Create Shared Style Programmatically.sketchplugin](./Samples/Create Shared Style Programmatically.sketchplugin)
-
-Works in:
-- Sketch 3.1 +
-
-## Missing 'MSColor.colorWithHex:alpha:'? :)
-
-Prior to Sketch 3.2 there was a really nice and handy class method called `MSColor.colorWithHex:alpha:` that allowed to create instance of `MSColor` class with hex string, but unfortunately with the release of Sketch 3.2 version it was removed from the API.
-
-Good news everyone! The replacement for this method does exist:
-```JavaScript
-// Create color without alpha.
-var color = MSColor.colorWithSVGString("#FF0000");
-print(color);
-// -> (r:1.000000 g:0.000000 b:0.000000 a:1.000000)
-
-// Create color with alpha.
-var color = MSColor.colorWithSVGString("#FF0000");
-color.alpha = 0.2;
-print(color);
-// -> (r:1.000000 g:0.000000 b:0.000000 a:0.200000)
-```
-
-Works in:
-- Sketch 3.0 +
-
-## Flatten Vector Layer
+## Flattening Complex Vector Layers
 
 If you want to flatten a complex vector layer that contains several sub paths combined using different boolean operations into single layer, you can use `+MSShapeGroup.flatten` method.
 
@@ -379,39 +344,25 @@ If you want to flatten a complex vector layer that contains several sub paths co
 
 This sample code flattens a first selected vector layer:
 ```JavaScript
-var selection = context.selection;
-var layer=selection.firstObject();
+var layer = context.selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
     layer.flatten();
 }
 ```
 
-Complete examples:
-- [Flatten Vector Layer.sketchplugin](./Samples/Flatten Vector Layer.sketchplugin)
+## Flattening Layers to Bitmap
 
-Works in:
-- Sketch 3.2 +
-
-## Flatten Layers to Bitmap
-
-### Note: This example currently doesn't work in Sketch 3.3 
-
-In order to flatten one or several layers of any type to a single `MSBitmapLayer`, use `-MSLayerFlattener.flattenLayers:` method. It accepts one arguments which is an array of layers to be flattened.
+In order to flatten one or several layers of any type to a single `MSBitmapLayer`, use `-MSLayerFlattener.flattenLayers:` method. It accepts one arguments which is a container of layers to be flattened.
 
 ![Flatten Layers to Bitmap](./docs/flatten_layers_to_bitmap.png)
 
 The following example flattens all the selected layers to a bitmap layer:
 ```JavaScript
 var flattener = MSLayerFlattener.alloc().init();
-flattener.flattenLayers(selection);
+flattener.flattenLayers(MSLayerArray.arrayWithLayers(context.selection));
 ```
-Complete examples:
-- [Flatten Selection to Bitmap.sketchplugin](./Samples/Flatten Selection To Bitmap.sketchplugin)
 
-Works in:
-- Sketch 3.2 +
-
-## Convert Text Layer to Outlines
+## Converting Text Layer to Vector
 
 In order to convert an existing `MSTextLayer` to `MSShapeGroup` layer, you have to get texts' `NSBezierPath` representation and then convert it to a `MSShapeGroup` layer.
 
@@ -422,19 +373,14 @@ The following source code demonstrates how to get text layers' vector outline an
 function convertToOutlines(layer) {
     if(!layer.isKindOfClass(MSTextLayer)) return;
 
-    var parent=layer.parentGroup();
-    var shape=MSShapeGroup.shapeWithBezierPath(layer.bezierPathWithTransforms());
+    var parent = layer.parentGroup();
+    var shape = MSShapeGroup.shapeWithBezierPath(layer.bezierPathWithTransforms());
 
-    shape.style = layer.style();
-    var style=shape.style();
-    if(!style.fill()) {
-        var fill=style.fills().addNewStylePart();
-        fill.color = MSColor.colorWithNSColor(layer.style().textStyle().attributes().NSColor);
-    }
+    var style = shape.style();
+    var fill = style.addStylePartOfType(0);
+    fill.color = MSColor.colorWithRGBADictionary(layer.textColor().RGBADictionary());
 
-    var isSelected=layer.isSelected();
     shape.name = layer.name();
-    shape.setIsSelected(isSelected);
 
     parent.removeLayer(layer);
     parent.addLayers([shape]);
@@ -442,46 +388,37 @@ function convertToOutlines(layer) {
     return shape;
 }
 
-var selection = context.selection;
-var layer=selection.firstObject();
+var layer= context.selection.firstObject();
 if(layer) {
-    var vectorizedTextLayer=convertToOutlines(layer);
-    print(vectorizedTextLayer);
+    var vectorizedTextLayer = convertToOutlines(layer);
+    if(!vectorizedTextLayer) {
+        context.document.showMessage("Select text layer to convert");
+    } else {
+        vectorizedTextLayer.select_byExpandingSelection(true,false)
+        print(vectorizedTextLayer);
+    }
 }
 ```
-Complete examples:
-- [Convert Text Layer to Outlines.sketchplugin](./Samples/Convert Text Layer to Outlines.sketchplugin)
 
-Works in:
-- Sketch 3.1 +
-
-## Get Points Coords Along the Shape Path
+## Getting Points Coordinates Along a Shape Path
 
 If you want to distribute some shapes along a path there is a convenient method `-pointOnPathAtLength:` implemented in `NSBezierPath_Slopes` class extension.
 
-This method accepts a `double` value that represents a position on path at which you want to get a point coordinate. It returns a `CGPoint` struct with coordinates of the point.
+This method accepts a `double` value that represents a position on path at which you want to get a point coordinate, where `0.0` value means start of the path and `1.0` end of the path. It returns a `CGPoint` struct with coordinates of the point.
 
 ![Ge points coords along shape path](./docs/getting_points_along_path.png)
 
 The following example divides shape path into 15 segments and prints out their points coordinates:
 ```JavaScript
-var selection = context.selection;
-var layer=selection.firstObject();
+var layer = context.selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
+    var count = 15;
+    var path = layer.bezierPathWithTransforms();
 
-    var count=15;
-    var path=layer.bezierPathWithTransforms();
-
-    var step=path.length()/count;
+    var step = path.length()/count;
     for(var i=0;i<=count;i++) {
-        var point=path.pointOnPathAtLength(step*i);
+        var point = path.pointOnPathAtLength(step*i);
         print(point);
     }
 }
 ```
-Complete examples:
-- [Get Points Coords Along Path.sketchplugin](./Samples/Get Points Coords Along Path.sketchplugin)
-- [Create Dots Along Path.sketchplugin](./Samples/Create Dots Along Path.sketchplugin)
-
-Works in:
-- Sketch 3.2 +

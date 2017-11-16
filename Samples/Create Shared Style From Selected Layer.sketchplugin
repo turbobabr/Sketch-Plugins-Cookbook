@@ -1,8 +1,0 @@
-(function(){
-    var layer=selection.firstObject();
-    if(layer) {
-        var sharedStyles=doc.documentData().layerStyles(); // Get shared styles container.
-        sharedStyles.addSharedStyleWithName_firstInstance("Custom Style",layer.style());
-    }
-})();
-
