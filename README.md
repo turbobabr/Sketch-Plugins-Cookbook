@@ -116,9 +116,9 @@ var sound = NSSound.soundNamed(SystemSounds.Glass)
 sound.play()
 ```
 
-## Center Rectangle in Canvas
+## Centering Rectangle on Canvas
 
-To center canvas on a certain point or region, you can use a handy `-(void)MSContentDrawView.centerRect:(GKRect*)rect animated:(BOOL)animated` instance method, where `rect` is a rectangle to be centered, `animated` is a flag that turns on/off animation during the scrolling process.
+To center canvas on a certain point or region, you can use a handy `-(void)MSContentDrawView.centerRect:(CGRect)rect animated:(BOOL)animated` instance method, where `rect` is a rectangle to be centered, `animated` is a flag that turns on/off animation during the scrolling process.
 
 ![Create Custom Shape](./docs/center_rect.png)
 
@@ -126,16 +126,15 @@ The origin and size of the rectangle you provide to this method should be in abs
 
 The following example centers viewport by `x:200,y:200` point:
 ```JavaScript
-var view=doc.currentView();
-var rect=GKRect.rectWithRect(NSMakeRect(200,200,1,1));
-view.centerRect_animated(rect,true);
+var canvasView = context.document.currentView(); // Getting canvas view
+canvasView.centerRect_animated(CGRectMake(200,200,1,1),true);
 ```
 The example below shows how to center a first selected layer using the same method:
 ```JavaScript
-var layer = selection.firstObject();
+var layer = context.selection.firstObject()
 if(layer) {
-    var view=doc.currentView();
-    view.centerRect_animated(layer.absoluteRect(),true);
+    var view = context.document.currentView();
+    view.centerRect_animated(layer.absoluteRect().rect(),true);
 }
 ```
 
