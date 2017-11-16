@@ -75,7 +75,7 @@ Usually sounds bound to commands are annoying and useless, but sometimes they ar
 
 ![Play Sound](./docs/play_sound.png)
 
-Since Sketch plugins have access to all the APIs of [AppKit Framework](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/ObjC_classic/index.html#//apple_ref/doc/uid/20001093), we are able to do really crazy & cool things with plugins.. for example play a `beep!` sound when plugin shows an error message using `-MSDocument.showMessage:` method to make the message more noticeable to a user.
+Since Sketch plugins have access to all the APIs of [AppKit Framework](https://developer.apple.com/documentation/appkit?language=objc), we are able to do really crazy & cool things with plugins.. for example play a `beep!` sound when plugin shows an error message using `-MSDocument.showMessage:` method to make the message more noticeable to a user.
 
 Here is how we can play `beep` sound to indicate some sort of error:
 ```JavaScript
@@ -83,7 +83,7 @@ context.document.showMessage("Hey! We have a problem!")
 NSBeep()
 ```
 
-To play a custom audio file we can use a simple interface of [NSSound](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSSound_Class/index.html) class. Here is the sample code how to use it:
+To play a custom audio file we can use a simple interface of [NSSound](https://developer.apple.com/documentation/appkit/nssound?language=objc) class. Here is the sample code how to use it:
 ```JavaScript
 var filePath = "/System/Library/Sounds/Pop.aiff"
 
