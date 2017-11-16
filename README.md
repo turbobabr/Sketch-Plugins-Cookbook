@@ -409,26 +409,24 @@ if(layer) {
 }
 ```
 
-## Get Points Coords Along the Shape Path
+## Getting Points Coordinates Along a Shape Path
 
 If you want to distribute some shapes along a path there is a convenient method `-pointOnPathAtLength:` implemented in `NSBezierPath_Slopes` class extension.
 
-This method accepts a `double` value that represents a position on path at which you want to get a point coordinate. It returns a `CGPoint` struct with coordinates of the point.
+This method accepts a `double` value that represents a position on path at which you want to get a point coordinate, where `0.0` value means start of the path and `1.0` end of the path. It returns a `CGPoint` struct with coordinates of the point.
 
 ![Ge points coords along shape path](./docs/getting_points_along_path.png)
 
 The following example divides shape path into 15 segments and prints out their points coordinates:
 ```JavaScript
-var selection = context.selection;
-var layer=selection.firstObject();
+var layer = context.selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
+    var count = 15;
+    var path = layer.bezierPathWithTransforms();
 
-    var count=15;
-    var path=layer.bezierPathWithTransforms();
-
-    var step=path.length()/count;
+    var step = path.length()/count;
     for(var i=0;i<=count;i++) {
-        var point=path.pointOnPathAtLength(step*i);
+        var point = path.pointOnPathAtLength(step*i);
         print(point);
     }
 }
