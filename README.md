@@ -290,38 +290,6 @@ fill.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 context.document.currentPage().addLayers([shapeGroup]);
 ```
 
-## Create Shared Style Programmatically
-
-In order to create a shared style programmatically you use `-MSSharedLayerStyleContainer.addSharedStyleWithName:(NSString*)name firstInstance:(MSStyle*)style` method, where `name` is a name of shared style being created, `style` is a reference style used as a template for future shared style.
-
-You can create a shared style from the existing style that is bound to some layer or create it from scratch with a custom `MSStyle` instance.
-
-![Create Shared Style Programmically](./docs/create_shared_style_programmatically.png)
-
-Create shared style from selected layers' style:
-```JavaScript
-var selection = context.selection;
-var doc = context.document;
-var layer=selection.firstObject();
-if(layer) {
-    var sharedStyles=doc.documentData().layerStyles();
-    sharedStyles.addSharedStyleWithName_firstInstance("Custom Style",layer.style());
-}
-```
-
-Create shared style from scratch:
-```JavaScript
-var doc = context.document;
-var sharedStyles=doc.documentData().layerStyles();
-
-var style=MSStyle.alloc().init();
-var fill=style.fills().addNewStylePart();
-fill.color = MSColor.colorWithSVGString("#B1C151");
-
-sharedStyles.addSharedStyleWithName_firstInstance("Custom Style 2",style);
-
-doc.reloadInspector();
-```
 
 ## Creating MSColor instances from CSS color strings (hex, rgba, etc)
 
