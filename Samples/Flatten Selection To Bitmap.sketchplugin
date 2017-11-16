@@ -1,4 +1,0 @@
-(function(){
-    var flattener = MSLayerFlattener.alloc().init();
-    flattener.flattenLayers(selection);
-})();

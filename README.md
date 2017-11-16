@@ -88,9 +88,6 @@ sound.play();
 
 > IMPORTANT NOTE: If you want to play audio files located outside of the plugins folder in MAS version of Sketch App, you have to use [sketch-sandbox](https://github.com/bomberstudios/sketch-sandbox) library to authorize access to the files, since this version of Sketch is sandboxed and prohibits access to files located outside of the sandbox.
 
-Complete examples:
-- [Play Sound.sketchplugin](./Samples/Play Sound.sketchplugin)
-
 
 Works in:
 - Sketch 3.0 +
@@ -149,10 +146,6 @@ fill.color = MSColor.colorWithSVGString("#dd0000");
 doc.currentPage().addLayers([shape]);
 ```
 
-Complete examples:
-- [Create Custom Shape.sketchplugin](./Samples/Create Custom Shape.sketchplugin)
-
-
 Works in:
 - Sketch 3.2 +
 
@@ -200,10 +193,6 @@ border.thickness = 2;
 doc.currentPage().addLayers([shape]);
 ```
 
-Complete examples:
-- [Create Line Shape.sketchplugin](./Samples/Create Line Shape.sketchplugin)
-- [Create Curved Line Shape.sketchplugin](./Samples/Create Curved Line Shape.sketchplugin)
-
 Works in:
 - Sketch 3.2 +
 
@@ -226,9 +215,6 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
     }
 }
 ```
-
-Complete examples:
-- [Set Border Radius From Components.sketchplugin](./Samples/Set Border Radius From Components.sketchplugin)
 
 Works in:
 - Sketch 3.2 +
@@ -304,9 +290,6 @@ fill.color = MSColor.colorWithSVGString("#dd2020");
 doc.currentPage().addLayers([shapeGroup]);
 ```
 
-Complete examples:
-- [Create Oval Shape.sketchplugin](./Samples/Create Oval Shape.sketchplugin)
-
 Works in:
 - Sketch 3.1 +
 
@@ -342,10 +325,6 @@ sharedStyles.addSharedStyleWithName_firstInstance("Custom Style 2",style);
 
 doc.reloadInspector();
 ```
-
-Complete examples:
-- [Create Shared Style From Selected Layer.sketchplugin](./Samples/Create Shared Style From Selected Layer.sketchplugin)
-- [Create Shared Style Programmatically.sketchplugin](./Samples/Create Shared Style Programmatically.sketchplugin)
 
 Works in:
 - Sketch 3.1 +
@@ -386,9 +365,6 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
 }
 ```
 
-Complete examples:
-- [Flatten Vector Layer.sketchplugin](./Samples/Flatten Vector Layer.sketchplugin)
-
 Works in:
 - Sketch 3.2 +
 
@@ -405,8 +381,6 @@ The following example flattens all the selected layers to a bitmap layer:
 var flattener = MSLayerFlattener.alloc().init();
 flattener.flattenLayers(selection);
 ```
-Complete examples:
-- [Flatten Selection to Bitmap.sketchplugin](./Samples/Flatten Selection To Bitmap.sketchplugin)
 
 Works in:
 - Sketch 3.2 +
@@ -449,8 +423,6 @@ if(layer) {
     print(vectorizedTextLayer);
 }
 ```
-Complete examples:
-- [Convert Text Layer to Outlines.sketchplugin](./Samples/Convert Text Layer to Outlines.sketchplugin)
 
 Works in:
 - Sketch 3.1 +
@@ -479,9 +451,6 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
     }
 }
 ```
-Complete examples:
-- [Get Points Coords Along Path.sketchplugin](./Samples/Get Points Coords Along Path.sketchplugin)
-- [Create Dots Along Path.sketchplugin](./Samples/Create Dots Along Path.sketchplugin)
 
 Works in:
 - Sketch 3.2 +
