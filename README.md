@@ -341,7 +341,7 @@ print(color);
 // -> (r:1.000000 g:0.000000 b:0.000000 a:0.200000)
 ```
 
-## Flatten Vector Layer
+## Flattening Complex Vector Layers
 
 If you want to flatten a complex vector layer that contains several sub paths combined using different boolean operations into single layer, you can use `+MSShapeGroup.flatten` method.
 
@@ -349,8 +349,7 @@ If you want to flatten a complex vector layer that contains several sub paths co
 
 This sample code flattens a first selected vector layer:
 ```JavaScript
-var selection = context.selection;
-var layer=selection.firstObject();
+var layer = context.selection.firstObject();
 if(layer && layer.isKindOfClass(MSShapeGroup)) {
     layer.flatten();
 }
