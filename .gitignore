@@ -3,3 +3,6 @@
 
 # IDE specific files
 .idea
+
+# Project specific
+playground

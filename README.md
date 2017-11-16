@@ -69,24 +69,52 @@ if(layer) {
 
 > Note: The usage of `===` and `!==` isn't forbidden, you can use them whenever you want to, but always pay attention to types of variables you compare. It's especially important when you try to port an existing JavaScript library or framework to CocoaScript. But anyway, I insist to forget strict equal/not equal operators and use '==' and '!=' + manual type check if needed.
 
-## Play Sound
+## Playing Sounds
 
 Usually sounds bound to commands are annoying and useless, but sometimes they are very helpful when used with care.
 
 ![Play Sound](./docs/play_sound.png)
 
-Since Sketch plugins have access to all the APIs of [AppKit Framework](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/ObjC_classic/index.html#//apple_ref/doc/uid/20001093), we are able to do really crazy & cool things with plugins.. for example play a `bump!` sound when plugin shows an error message using `-MSDocument.displayMessage:` method to make the message more noticeable to the user.
+Since Sketch plugins have access to all the APIs of [AppKit Framework](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/ObjC_classic/index.html#//apple_ref/doc/uid/20001093), we are able to do really crazy & cool things with plugins.. for example play a `beep!` sound when plugin shows an error message using `-MSDocument.showMessage:` method to make the message more noticeable to a user.
 
-To play a sound we can use a simple interface of [NSSound](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSSound_Class/index.html) class. Here is the example how to use it:
+Here is how we can play `beep` sound to indicate some sort of error:
 ```JavaScript
-var filePath = sketch.scriptPath.stringByDeletingLastPathComponent()+"/assets/glass.aiff";
+context.document.showMessage("Hey! We have a problem!")
+NSBeep()
+```
+
+To play a custom audio file we can use a simple interface of [NSSound](https://developer.apple.com/library/mac/Documentation/Cocoa/Reference/ApplicationKit/Classes/NSSound_Class/index.html) class. Here is the sample code how to use it:
+```JavaScript
+var filePath = "/System/Library/Sounds/Pop.aiff"
 
 var sound = NSSound.alloc().initWithContentsOfFile_byReference(filePath,true);
-doc.displayMessage("I'm Mr Meeseeks LOOK AT ME! :)")
 sound.play();
 ```
 
-> IMPORTANT NOTE: If you want to play audio files located outside of the plugins folder in MAS version of Sketch App, you have to use [sketch-sandbox](https://github.com/bomberstudios/sketch-sandbox) library to authorize access to the files, since this version of Sketch is sandboxed and prohibits access to files located outside of the sandbox.
+
+
+Alternatively, you can play any system sound using a handy [+NSSound.soundNamed:](https://developer.apple.com/documentation/appkit/nssound/1477318-soundnamed?language=objc) class method:
+```JavaScript
+const SystemSounds = {
+  Basso: "Basso",
+  Blow: "Blow",
+  Bottle: "Bottle",
+  Frog: "Frog",
+  Funk: "Funk",
+  Glass: "Glass",
+  Hero: "Hero",
+  Morse: "Morse",
+  Ping: "Ping",
+  Pop: "Pop",
+  Purr: "Purr",
+  Sosumi: "Sosumi",
+  Submarine: "Submarine",
+  Tink: "Tink"
+};
+
+var sound = NSSound.soundNamed(SystemSounds.Glass)
+sound.play()
+```
 
 ## Center Rectangle in Canvas
 
