@@ -88,10 +88,6 @@ sound.play();
 
 > IMPORTANT NOTE: If you want to play audio files located outside of the plugins folder in MAS version of Sketch App, you have to use [sketch-sandbox](https://github.com/bomberstudios/sketch-sandbox) library to authorize access to the files, since this version of Sketch is sandboxed and prohibits access to files located outside of the sandbox.
 
-
-Works in:
-- Sketch 3.0 +
-
 ## Center Rectangle in Canvas
 
 To center canvas on a certain point or region, you can use a handy `-(void)MSContentDrawView.centerRect:(GKRect*)rect animated:(BOOL)animated` instance method, where `rect` is a rectangle to be centered, `animated` is a flag that turns on/off animation during the scrolling process.
@@ -114,9 +110,6 @@ if(layer) {
     view.centerRect_animated(layer.absoluteRect(),true);
 }
 ```
-
-Works in:
-- Sketch 3.1 +
 
 ## Create Custom Shape
 
@@ -145,9 +138,6 @@ fill.color = MSColor.colorWithSVGString("#dd0000");
 
 doc.currentPage().addLayers([shape]);
 ```
-
-Works in:
-- Sketch 3.2 +
 
 ## Create Line Shape
 
@@ -193,9 +183,6 @@ border.thickness = 2;
 doc.currentPage().addLayers([shape]);
 ```
 
-Works in:
-- Sketch 3.2 +
-
 ## Set Border Radius for Specific Corners
 
 Starting from version 3.2 Sketch allows to set custom border radius for specific corner of rectangle shape. It was possible prior to 3.2, but there was no direct API.
@@ -215,9 +202,6 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
     }
 }
 ```
-
-Works in:
-- Sketch 3.2 +
 
 ## Scaling Layers
 
@@ -248,9 +232,6 @@ if(layer) {
 }
 ```
 
-Works in:
-- Sketch 3.1 +
-
 ## Finding Bounds For a Set of Layers
 
 If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(CGRect)MSLayerGroup.groupBoundsForLayers:(NSArray*)layers`. It accepts a list of layers and returns CGRect structure.
@@ -267,9 +248,6 @@ print("y: "+bounds.origin.y);
 print("width: "+bounds.size.width);
 print("height: "+bounds.size.height);
 ```
-
-Works in:
-- Sketch 3.3 +
 
 ## Create Oval Shape
 
@@ -289,9 +267,6 @@ fill.color = MSColor.colorWithSVGString("#dd2020");
 
 doc.currentPage().addLayers([shapeGroup]);
 ```
-
-Works in:
-- Sketch 3.1 +
 
 ## Create Shared Style Programmatically
 
@@ -326,9 +301,6 @@ sharedStyles.addSharedStyleWithName_firstInstance("Custom Style 2",style);
 doc.reloadInspector();
 ```
 
-Works in:
-- Sketch 3.1 +
-
 ## Missing 'MSColor.colorWithHex:alpha:'? :)
 
 Prior to Sketch 3.2 there was a really nice and handy class method called `MSColor.colorWithHex:alpha:` that allowed to create instance of `MSColor` class with hex string, but unfortunately with the release of Sketch 3.2 version it was removed from the API.
@@ -347,9 +319,6 @@ print(color);
 // -> (r:1.000000 g:0.000000 b:0.000000 a:0.200000)
 ```
 
-Works in:
-- Sketch 3.0 +
-
 ## Flatten Vector Layer
 
 If you want to flatten a complex vector layer that contains several sub paths combined using different boolean operations into single layer, you can use `+MSShapeGroup.flatten` method.
@@ -365,9 +334,6 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
 }
 ```
 
-Works in:
-- Sketch 3.2 +
-
 ## Flatten Layers to Bitmap
 
 ### Note: This example currently doesn't work in Sketch 3.3 
@@ -381,9 +347,6 @@ The following example flattens all the selected layers to a bitmap layer:
 var flattener = MSLayerFlattener.alloc().init();
 flattener.flattenLayers(selection);
 ```
-
-Works in:
-- Sketch 3.2 +
 
 ## Convert Text Layer to Outlines
 
@@ -424,9 +387,6 @@ if(layer) {
 }
 ```
 
-Works in:
-- Sketch 3.1 +
-
 ## Get Points Coords Along the Shape Path
 
 If you want to distribute some shapes along a path there is a convenient method `-pointOnPathAtLength:` implemented in `NSBezierPath_Slopes` class extension.
@@ -451,6 +411,3 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
     }
 }
 ```
-
-Works in:
-- Sketch 3.2 +
