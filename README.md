@@ -297,8 +297,8 @@ There is no way to create instance of `MSColor` model class from CSS string dire
 
 Here is a super handy helper function and a bunch of calls with various supported formats of providing color as string:
 ```JavaScript
-function MSColorFromString(str) {
-    return MSImmutableColor.colorWithSVGString("#33AE15").newMutableCounterpart()
+function MSColorFromString(color) {
+    return MSImmutableColor.colorWithSVGString(color).newMutableCounterpart()
 }
 
 // Hex
