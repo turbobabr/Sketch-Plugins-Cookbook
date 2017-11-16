@@ -370,7 +370,7 @@ var flattener = MSLayerFlattener.alloc().init();
 flattener.flattenLayers(selection);
 ```
 
-## Convert Text Layer to Outlines
+## Converting Text Layer to Vector
 
 In order to convert an existing `MSTextLayer` to `MSShapeGroup` layer, you have to get texts' `NSBezierPath` representation and then convert it to a `MSShapeGroup` layer.
 
@@ -381,19 +381,14 @@ The following source code demonstrates how to get text layers' vector outline an
 function convertToOutlines(layer) {
     if(!layer.isKindOfClass(MSTextLayer)) return;
 
-    var parent=layer.parentGroup();
-    var shape=MSShapeGroup.shapeWithBezierPath(layer.bezierPathWithTransforms());
+    var parent = layer.parentGroup();
+    var shape = MSShapeGroup.shapeWithBezierPath(layer.bezierPathWithTransforms());
 
-    shape.style = layer.style();
-    var style=shape.style();
-    if(!style.fill()) {
-        var fill=style.fills().addNewStylePart();
-        fill.color = MSColor.colorWithNSColor(layer.style().textStyle().attributes().NSColor);
-    }
+    var style = shape.style();
+    var fill = style.addStylePartOfType(0);
+    fill.color = MSColor.colorWithRGBADictionary(layer.textColor().RGBADictionary());
 
-    var isSelected=layer.isSelected();
     shape.name = layer.name();
-    shape.setIsSelected(isSelected);
 
     parent.removeLayer(layer);
     parent.addLayers([shape]);
@@ -401,11 +396,15 @@ function convertToOutlines(layer) {
     return shape;
 }
 
-var selection = context.selection;
-var layer=selection.firstObject();
+var layer= context.selection.firstObject();
 if(layer) {
-    var vectorizedTextLayer=convertToOutlines(layer);
-    print(vectorizedTextLayer);
+    var vectorizedTextLayer = convertToOutlines(layer);
+    if(!vectorizedTextLayer) {
+        context.document.showMessage("Select text layer to convert");
+    } else {
+        vectorizedTextLayer.select_byExpandingSelection(true,false)
+        print(vectorizedTextLayer);
+    }
 }
 ```
 
