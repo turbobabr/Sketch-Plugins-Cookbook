@@ -129,12 +129,12 @@ The following example centers viewport by `x:200,y:200` point:
 var canvasView = context.document.currentView(); // Getting canvas view
 canvasView.centerRect_animated(CGRectMake(200,200,1,1),true);
 ```
-The example below shows how to center a first selected layer using the same method:
+The example below shows how to center on the first selected layer using the same method without animation:
 ```JavaScript
 var layer = context.selection.firstObject()
 if(layer) {
     var view = context.document.currentView();
-    view.centerRect_animated(layer.absoluteRect().rect(),true);
+    view.centerRect_animated(layer.absoluteRect().rect(),false);
 }
 ```
 
@@ -272,7 +272,7 @@ print("width: "+bounds.size.width);
 print("height: "+bounds.size.height);
 ```
 
-## Create Oval Shape
+## Creating Oval Shape
 
 In order to create an oval shape programmatically, you have to create an instance of `MSOvalShape` class, set its frame and wrap with `MSShapeGroup` container.
 
