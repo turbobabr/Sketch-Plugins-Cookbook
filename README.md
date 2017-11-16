@@ -323,22 +323,49 @@ sharedStyles.addSharedStyleWithName_firstInstance("Custom Style 2",style);
 doc.reloadInspector();
 ```
 
-## Missing 'MSColor.colorWithHex:alpha:'? :)
+## Creating MSColor instances from CSS color strings (hex, rgba, etc)
 
-Prior to Sketch 3.2 there was a really nice and handy class method called `MSColor.colorWithHex:alpha:` that allowed to create instance of `MSColor` class with hex string, but unfortunately with the release of Sketch 3.2 version it was removed from the API.
+There is no way to create instance of `MSColor` model class from CSS string directly, but it's possible to do so via it's immutable counterpart class named `MSImmutableColor`. It has a class method `+MSImmutableColor.colorWithSVGString:(NSString*)string` that accepts any value supported by [CSS Color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) data type.
 
-Good news everyone! The replacement for this method does exist:
+Here is a super handy helper function and a bunch of calls with various supported formats of providing color as string:
 ```JavaScript
-// Create color without alpha.
-var color = MSColor.colorWithSVGString("#FF0000");
-print(color);
-// -> (r:1.000000 g:0.000000 b:0.000000 a:1.000000)
+function MSColorFromString(str) {
+    return MSImmutableColor.colorWithSVGString("#33AE15").newMutableCounterpart()
+}
 
-// Create color with alpha.
-var color = MSColor.colorWithSVGString("#FF0000");
-color.alpha = 0.2;
-print(color);
-// -> (r:1.000000 g:0.000000 b:0.000000 a:0.200000)
+// Hex
+MSColorFromString("#33AE15")
+MSColorFromString("#333")
+MSColorFromString("FF0000")
+MSColorFromString("#145515FF")
+
+// rgb/rgba
+MSColorFromString("rgb(255,0,0)")
+MSColorFromString("rgba(255,0,0,0.5)")
+
+// Color keywords
+MSColorFromString("red")
+MSColorFromString("blue")
+MSColorFromString("magenta")
+MSColorFromString("darkviolet")
+
+// hls
+MSColorFromString("hsl(270, 60%, 50%, .15)")
+MSColorFromString("hsl(270deg, 60%, 70%)")
+MSColorFromString("hsl(4.71239rad, 60%, 70%)")
+MSColorFromString("hsla(240, 100%, 50%, .4)")
+```
+
+The following example demonstrates how to set fill color for a selected layer using `MSColorFromString` helper function:
+```JavaScript
+function MSColorFromString(color) {
+    return MSImmutableColor.colorWithSVGString(color).newMutableCounterpart()
+}
+
+var layer = context.selection.firstObject();
+if(layer) {
+    layer.style().firstEnabledFill().color = MSColorFromString("#FA1010");
+}
 ```
 
 ## Flattening Complex Vector Layers
