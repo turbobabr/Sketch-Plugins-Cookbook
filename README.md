@@ -5,7 +5,7 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
-## Using Image Fills
+## #16 Using Image Fills
 
 Sketch supports a bunch of various modes to fill style based layers(`MSShapeGroup`, `MSTextLayer`, etc) with images. Currently, we can use for modes that illustrated below:
 
@@ -151,7 +151,7 @@ As a result of running the sample above, you might get something like this:
 ![Image Pattern Fill](./docs/fill_pattern_tiled_results.png)
 
 
-## Working with Constraints
+## #15 Working with Constraints
 
 All edge constraints are always anchored to a parent group (e.g, artboard, symbol or layer group) of the layer:
 
@@ -192,7 +192,7 @@ if(layer) {
 ```
 
 
-## CocoaScript: Don't use '===' operator
+## #14 CocoaScript: Don't use '===' operator
 
 At first glance CocoaScript seems to be a just fancy name for JavaScript with some syntactic sugar, but in reality many things work differently and it's better to know them.
 
@@ -256,7 +256,7 @@ if(layer) {
 
 > Note: The usage of `===` and `!==` isn't forbidden, you can use them whenever you want to, but always pay attention to types of variables you compare. It's especially important when you try to port an existing JavaScript library or framework to CocoaScript. But anyway, I insist to forget strict equal/not equal operators and use '==' and '!=' + manual type check if needed.
 
-## Playing Sounds
+## #13 Playing Sounds
 
 Usually sounds bound to commands are annoying and useless, but sometimes they are very helpful when used with care.
 
@@ -303,7 +303,7 @@ var sound = NSSound.soundNamed(SystemSounds.Glass)
 sound.play()
 ```
 
-## Centering Rectangle on Canvas
+## #12 Centering Rectangle on Canvas
 
 To center canvas on a certain point or region, you can use a handy `-(void)MSContentDrawView.centerRect:(CGRect)rect animated:(BOOL)animated` instance method, where `rect` is a rectangle to be centered, `animated` is a flag that turns on/off animation during the scrolling process.
 
@@ -325,7 +325,7 @@ if(layer) {
 }
 ```
 
-## Creating Custom Shape
+## #11 Creating Custom Shape
 
 To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and draw whatever shape or combination of shapes you want to. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
 
@@ -355,7 +355,7 @@ var currentParentGroup = documentData.currentPage().currentArtboard() || documen
 currentParentGroup.addLayers([shape]);
 ```
 
-## Create Line Shape
+## #10 Create Line Shape
 
 In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and add two points to it. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
 
@@ -395,7 +395,7 @@ border.thickness = 2;
 context.document.currentPage().addLayers([shape]);
 ```
 
-## Setting Border Radius for Specific Corners
+## #9 Setting Border Radius for Specific Corners
 
 Starting from version 3.2 Sketch allows to set custom border radius for specific corner of rectangle shape. It was possible prior to 3.2, but there was no direct API.
 
@@ -414,7 +414,7 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
 }
 ```
 
-## Scaling Layers
+## #8 Scaling Layers
 
 You can scale any layer using `-MSLayer.multiplyBy:(double)scaleFactor` instance method, where `scaleFactor` is a floating-point value that is used to multiple all the layers' properties including position, size, and all the style attributes such as border thickness, shadow, etc. Here are some example scale factors: `1.0 = 100%`, `2.5 = 250%`, `0.5 = 50%`, etc.
 
@@ -442,7 +442,7 @@ if(layer) {
 }
 ```
 
-## Finding Bounds For a Set of Layers
+## #7 Finding Bounds For a Set of Layers
 
 If you want to quickly find a bounding rectangle for selected layers or any set of layers, there is a very handy class method for that `+(CGRect)MSLayerGroup.groupBoundsForContainer:(MSLayerArray*)container`. It accepts an instance of `MSLayerArray` class, that represents a list of layers.
 
@@ -459,7 +459,7 @@ print("width: "+bounds.size.width);
 print("height: "+bounds.size.height);
 ```
 
-## Creating Oval Shape
+## #6 Creating Oval Shape
 
 In order to create an oval shape programmatically, you have to create an instance of `MSOvalShape` class, set its frame and wrap with `MSShapeGroup` container.
 
@@ -478,7 +478,7 @@ context.document.currentPage().addLayers([shapeGroup]);
 ```
 
 
-## Creating MSColor instances from CSS color strings (hex, rgba, etc)
+## #5 Creating MSColor instances from CSS color strings (hex, rgba, etc)
 
 There is no way to create instance of `MSColor` model class from CSS string directly, but it's possible to do so via it's immutable counterpart class named `MSImmutableColor`. It has a class method `+MSImmutableColor.colorWithSVGString:(NSString*)string` that accepts any value supported by [CSS Color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) data type.
 
@@ -523,7 +523,7 @@ if(layer) {
 }
 ```
 
-## Flattening Complex Vector Layers
+## #4 Flattening Complex Vector Layers
 
 If you want to flatten a complex vector layer that contains several sub paths combined using different boolean operations into single layer, you can use `+MSShapeGroup.flatten` method.
 
@@ -537,7 +537,7 @@ if(layer && layer.isKindOfClass(MSShapeGroup)) {
 }
 ```
 
-## Flattening Layers to Bitmap
+## #3 Flattening Layers to Bitmap
 
 In order to flatten one or several layers of any type to a single `MSBitmapLayer`, use `-MSLayerFlattener.flattenLayers:` method. It accepts one arguments which is a container of layers to be flattened.
 
@@ -549,7 +549,7 @@ var flattener = MSLayerFlattener.alloc().init();
 flattener.flattenLayers(MSLayerArray.arrayWithLayers(context.selection));
 ```
 
-## Converting Text Layer to Vector
+## #2 Converting Text Layer to Vector
 
 In order to convert an existing `MSTextLayer` to `MSShapeGroup` layer, you have to get texts' `NSBezierPath` representation and then convert it to a `MSShapeGroup` layer.
 
@@ -587,7 +587,7 @@ if(layer) {
 }
 ```
 
-## Getting Points Coordinates Along a Shape Path
+## #1 Getting Points Coordinates Along a Shape Path
 
 If you want to distribute some shapes along a path there is a convenient method `-pointOnPathAtLength:` implemented in `NSBezierPath_Slopes` class extension.
 
