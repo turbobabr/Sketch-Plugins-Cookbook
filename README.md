@@ -11,7 +11,7 @@ Save string to file.
 ```js
 function writeToFile(path, content) {
     const string = NSString.stringWithFormat("%@", content);
-    string.writeToFile_atomically(path, true);
+    return string.writeToFile_atomically(path, true);
 }
 ```
 More can be found in [sskyy/blade](https://github.com/sskyy/blade/blob/master/src/plugin/common.js) repo.
