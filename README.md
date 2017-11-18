@@ -29,7 +29,7 @@ const PatternFillType = {
 
 ```
 
-The following sample code demonstrates how to use load image from the local file system and set it as a pattern fill for selected layer:
+The following sample code demonstrates how to load image from the local file system and set it as a pattern fill for selected layer:
 ```JavaScript
 const FillType = { Solid: 0, Gradient: 1, Pattern: 4, Noise: 5 };
 const PatternFillType = { Tile: 0, Fill: 1, Stretch: 2, Fit: 3};
@@ -141,6 +141,7 @@ if(layer && layer.style().firstEnabledFill()) {
 ```
 
 As a result of running the sample above, you might get something like this:
+
 ![Image Pattern Fill](./docs/fill_pattern_tiled_results.png)
 
 
