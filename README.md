@@ -29,6 +29,8 @@ const PatternFillType = {
 
 ```
 
+#### Using local image files
+
 The following sample code demonstrates how to load image from the local file system and set it as a pattern fill for selected layer:
 ```JavaScript
 const FillType = { Solid: 0, Gradient: 1, Pattern: 4, Noise: 5 };
@@ -59,7 +61,9 @@ if(layer && layer.style().firstEnabledFill()) {
 }
 ```
 
-Same thing, but here we use a helper function to fetch remote image:
+#### Using remote image files
+
+In order to use remote image file we have download it first and convert to an instance of `NSImage` first using a helper function:
 ```JavaScript
 const FillType = { Solid: 0, Gradient: 1, Pattern: 4, Noise: 5 };
 const PatternFillType = { Tile: 0, Fill: 1, Stretch: 2, Fit: 3};
@@ -105,6 +109,8 @@ if(layer && layer.style().firstEnabledFill()) {
 }
 ```
 > Caution: Sketch does not support HTTP requests using plain `http` protocol due to [App Transport Security (ATS)](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) networking permissions defined in SketchApp. Be sure that you use `https` protocol and all your urls has `https://` perfix.
+
+#### Using tiled fill
 
 There's a special case for `Tile` mode, since it has additional `patternTileScale` property involved to control scaling of the image pattern:
 ```JavaScript
