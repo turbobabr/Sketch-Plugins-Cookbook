@@ -14,7 +14,7 @@ function writeToFile(path, content) {
     string.writeToFile_atomically(path, true);
 }
 ```
-More can be found [here](https://github.com/sskyy/blade/blob/master/src/plugin/common.js).
+More can be found in [sskyy/blade](https://github.com/sskyy/blade/blob/master/src/plugin/common.js) repo.
 
 ## #16 Using Image Fills
 
