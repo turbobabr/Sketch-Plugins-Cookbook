@@ -5,6 +5,145 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## Using Image Fills
+
+Sketch supports a bunch of various modes to fill style based layers(MSShapeGroup, MSTextLayer, etc) with images. Currently, we can use for modes that illustrated below:
+
+![Image Pattern Fill](./docs/fill_pattern_type_results.png)
+
+To get started, we have to grab a couple of useful definitions of Sketch constants from [sketch-constants](https://github.com/turbobabr/sketch-constants/blob/master/src/index.js) repo. They will be used in all the examples below:
+```JavaScript
+const FillType = {
+    Solid: 0,
+    Gradient: 1,
+    Pattern: 4,
+    Noise: 5
+};
+
+const PatternFillType = {
+    Tile: 0,
+    Fill: 1,
+    Stretch: 2,
+    Fit: 3
+};
+
+```
+
+The following sample code demonstrates how to use load image from the local file system and set it as a pattern fill for selected layer:
+```JavaScript
+const FillType = { Solid: 0, Gradient: 1, Pattern: 4, Noise: 5 };
+const PatternFillType = { Tile: 0, Fill: 1, Stretch: 2, Fit: 3};
+
+function loadLocalImage(filePath) {
+    if(!NSFileManager.defaultManager().fileExistsAtPath(filePath)) {
+        return null;
+    }
+
+    return NSImage.alloc().initWithContentsOfFile(filePath);
+}
+
+var layer = context.selection.firstObject();
+if(layer && layer.style().firstEnabledFill()) {
+   const fill = layer.style().firstEnabledFill()
+    var image = loadLocalImage("/Applications/Sketch.app/Contents/Resources/app.icns");
+    if(image) {
+        fill.fillType = FillType.Pattern;
+        fill.patternFillType = PatternFillType.Fill;
+        fill.image = MSImageData.alloc().initWithImageConvertingColorSpace(image);
+
+    } else {
+        context.document.showMessage("[erorr]: Can't load image!");
+    }
+} else {
+    context.document.showMessage("[error]: Select a layer that has at least one fill style");
+}
+```
+
+Same thing, but here we use a helper function to fetch remote image:
+```JavaScript
+const FillType = { Solid: 0, Gradient: 1, Pattern: 4, Noise: 5 };
+const PatternFillType = { Tile: 0, Fill: 1, Stretch: 2, Fit: 3};
+
+function fetchImage(url,ingnoreCache) {
+    var request = ingnoreCache ?NSURLRequest.requestWithURL_cachePolicy_timeoutInterval(NSURL.URLWithString(url),NSURLRequestReloadIgnoringLocalCacheData,60) : NSURLRequest.requestWithURL(NSURL.URLWithString(url));
+    var responsePtr = MOPointer.alloc().init();
+    var errorPtr = MOPointer.alloc().init();
+
+    var data = NSURLConnection.sendSynchronousRequest_returningResponse_error(request, responsePtr, errorPtr);
+    if(errorPtr.value() != null) {
+        print(errorPtr.value());
+        return null;
+    }
+
+    var response = responsePtr.value();
+    if(response.statusCode() != 200) {
+        return null;
+    }
+
+    var mimeType = response.allHeaderFields()["Content-Type"];
+    if(!mimeType || !mimeType.hasPrefix("image/")) {
+        return null;
+    }
+
+    return NSImage.alloc().initWithData(data);
+}
+
+var layer = context.selection.firstObject();
+if(layer && layer.style().firstEnabledFill()) {
+   const fill = layer.style().firstEnabledFill()
+    var image = fetchImage("https://s3.amazonaws.com/sketch-plugins-cookbook/jake_the_dog.png");
+    if(image) {
+        fill.fillType = FillType.Pattern;
+        fill.patternFillType = PatternFillType.Fill;
+        fill.image = MSImageData.alloc().initWithImageConvertingColorSpace(image);
+
+    } else {
+        print("Can't load image!");
+    }
+} else {
+    print("Select a layer that has at least one fill style");
+}
+```
+> Caution: Sketch does not support HTTP requests using plain `http` protocol due to [App Transport Security (ATS)](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) networking permissions defined in SketchApp. Be sure that you use `https` protocol and all your urls has `https://` perfix.
+
+There's a special case for `Tile` mode, since it has additional `patternTileScale` property involved to control scaling of the image pattern:
+```JavaScript
+const FillType = { Solid: 0, Gradient: 1, Pattern: 4, Noise: 5 };
+const PatternFillType = { Tile: 0, Fill: 1, Stretch: 2, Fit: 3};
+
+function loadLocalImage(filePath) {
+    if(!NSFileManager.defaultManager().fileExistsAtPath(filePath)) {
+        return null;
+    }
+
+    return NSImage.alloc().initWithContentsOfFile(filePath);
+}
+
+var layer = context.selection.firstObject();
+if(layer && layer.style().firstEnabledFill()) {
+   const fill = layer.style().firstEnabledFill()
+    var image = loadLocalImage("/Applications/Sketch.app/Contents/Resources/app.icns");
+    if(image) {
+        fill.fillType = FillType.Pattern;
+
+        // Setting up tiled fill
+        fill.patternFillType = PatternFillType.Tile;
+        fill.patternTileScale = 0.1; // This property is just a multiplier of original image size
+
+        fill.image = MSImageData.alloc().initWithImageConvertingColorSpace(image);
+
+    } else {
+        context.document.showMessage("[erorr]: Can't load image!");
+    }
+} else {
+    context.document.showMessage("[error]: Select a layer that has at least one fill style");
+}
+```
+
+As a result of running the sample above, you might get something like this:
+![Image Pattern Fill](./docs/fill_pattern_tiled_results.png)
+
+
 ## Working with Constraints
 
 All edge constraints are always anchored to a parent group (e.g, artboard, symbol or layer group) of the layer:
