@@ -7,7 +7,7 @@ I will be posting daily updates in my twitter. Follow me [@turbobabr](https://tw
 
 ## Using Image Fills
 
-Sketch supports a bunch of various modes to fill style based layers(MSShapeGroup, MSTextLayer, etc) with images. Currently, we can use for modes that illustrated below:
+Sketch supports a bunch of various modes to fill style based layers(`MSShapeGroup`, `MSTextLayer`, etc) with images. Currently, we can use for modes that illustrated below:
 
 ![Image Pattern Fill](./docs/fill_pattern_type_results.png)
 
@@ -63,7 +63,7 @@ if(layer && layer.style().firstEnabledFill()) {
 
 #### Using remote image files
 
-In order to use remote image file we have download it first and convert to an instance of `NSImage` first using a helper function:
+In order to use remote image file we have to download it first and convert to an instance of `NSImage` first using a helper function:
 ```JavaScript
 const FillType = { Solid: 0, Gradient: 1, Pattern: 4, Noise: 5 };
 const PatternFillType = { Tile: 0, Fill: 1, Stretch: 2, Fit: 3};
