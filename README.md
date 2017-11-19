@@ -5,6 +5,17 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## #17 Working with files
+Save string to file.
+
+```js
+function writeToFile(path, content) {
+    const string = NSString.stringWithFormat("%@", content);
+    return string.writeToFile_atomically(path, true);
+}
+```
+More can be found in [sskyy/blade](https://github.com/sskyy/blade/blob/master/src/plugin/common.js) repo.
+
 ## #16 Using Image Fills
 
 Sketch supports a bunch of various modes to fill style based layers(`MSShapeGroup`, `MSTextLayer`, etc) with images. Currently, we can use for modes that illustrated below:
