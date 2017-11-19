@@ -6,6 +6,8 @@ A collection of recipes for Sketch App plugins developers.
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
 ## #17 Working with files
+Author: [@pravdomil](https://github.com/pravdomil)
+
 Save string to file.
 
 ```js
