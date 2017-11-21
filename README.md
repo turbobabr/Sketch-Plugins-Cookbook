@@ -5,6 +5,67 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## #19 Inserting Emoji as Bitmap Layers
+
+![Emoji](./docs/emoji_circle.png)
+
+Frankly speaking, this recipe doesn't show any new tricks related to Sketch itself. I just want to demonstrate the power of `AppKit/CoreGraphics` frameworks and how they could be used in Sketch plugins.
+
+No more words, here is the code:
+```js
+function emojiToImage(str,sideSize) {
+    var imageWidth = sideSize;
+    var imageHeight = sideSize;
+    var imageSize = CGSizeMake(imageWidth,imageHeight);
+
+    var drawingContext = CGBitmapContextCreate(null,imageWidth,imageHeight,8,0,CGColorSpaceCreateDeviceRGB(),kCGImageAlphaPremultipliedFirst);
+
+    var graphicsContext = NSGraphicsContext.graphicsContextWithCGContext_flipped(drawingContext,false);
+    NSGraphicsContext.saveGraphicsState()
+    NSGraphicsContext.setCurrentContext(graphicsContext);
+
+    var targetRect = CGRectMake(0,0,imageWidth,imageHeight);
+
+    var attrs = {};
+    attrs[NSFontAttributeName] = NSFont.systemFontOfSize(sideSize);
+    str.drawInRect_withAttributes(targetRect,attrs);
+
+    NSGraphicsContext.restoreGraphicsState()
+
+    var cgImage = CGBitmapContextCreateImage(drawingContext);
+    return NSImage.alloc().initWithCGImage_size(cgImage,imageSize);
+}
+
+var emoji = ['😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '😗', '😙', '😚', '☺', '🙂', '🤗', '🤔', '😐', '😑', '😶', '🙄', '😏', '😣', '😥', '😮', '🤐', '😯', '😪', '😫', '😴', '😌', '🤓', '😛', '😜', '😝', '🤤', '😒', '😓', '😔', '😕', '🙃', '🤑', '😲', '☹', '🙁', '😖', '😞', '😟', '😤', '😢', '😭', '😦', '😧', '😨', '😩', '😬', '😰', '😱', '😳', '😵', '😡', '😠', '😇', '🤠', '🤡', '🤥', '😷', '🤒', '🤕', '🤢', '🤧', '😈', '👿', '👹', '👺', '💀', '☠', '👻', '👽', '👾', '🤖', '💩', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾', '🙈', '🙉', '🙊', '👦', '👦🏻', '👦🏼', '👦🏽', '👦🏾', '👦🏿'];
+
+function randomPointAtCircle(centerX,centerY,radius) {
+    var angle = Math.random()*Math.PI*2;
+    return CGPointMake(centerX+Math.cos(angle)*radius,centerY+Math.sin(angle)*radius);
+}
+
+function layerWithImage(image) {
+    var layer = MSBitmapLayer.alloc().init();
+    layer.rect = CGRectMake(0,0,128,128);
+    layer.image = MSImageData.alloc().initWithImageConvertingColorSpace(image);
+    layer.frame().mid = randomPointAtCircle(400,400,400)
+    layer.multiplyBy(0.2 + 0.8*Math.random());
+    layer.makeRectIntegral();
+
+    return layer;
+}
+
+for(var i=0;i<emoji.length;i++) {
+    var str = NSString.stringWithString(emoji[i]));
+    var layer = layerWithImage(emojiToImage(str,128));
+
+    context.document.currentPage().addLayers([layer]);
+}
+```
+
+Credits:
+- Idea and original code by Daniel Jalkut ([Evergreen Images](http://indiestack.com/2017/06/evergreen-images/))
+- List of all emoji for JavaScript by @theraot ([emoji](https://github.com/theraot/emoji/blob/master/emoji.js))
+
 ## #18 Using Obj-C Pointers + Handling Cocoa Errors
 
 Many AppKit and Sketch internal APIs have methods and functions that require passing so called `pointer to pointer` arguments. Whenever you see argument type that looks like `(id *)`, `NSError **`, `NSError * _Nullable *`, etc in any Objective-C API - it means that it wants pointer that points to a pointer thing :). It came to Objective-C from [C Programming Language](https://en.wikipedia.org/wiki/C_(programming_language)), since Objective-C is a layer build atop of `C Language`. You can read more about that pointer to pointer concept here - [TurorialsPoint: C - Pointer to Pointer](https://www.tutorialspoint.com/cprogramming/c_pointer_to_pointer.htm). Also, there's another case when we need to pass pointers to C value variables, e.g. `(char*)` to let method populate the value of that variable during it's execution.
