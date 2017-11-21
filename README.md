@@ -5,6 +5,33 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## #20 Converting SVG Path Commands to Sketch Vector Shapes
+
+![SVG Path Shrug](./docs/svg_path_shrug.png)
+
+In case you want to create a `MSShapeGroup` layer out of set of [SVG Path Commands](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths), there is an easy way to do that by using
+[+SVGPathInterpreter.bezierPathFromCommands:(NSString*)commands isPathClosed:(char *)isClosed](https://github.com/abynim/Sketch-Headers/blob/2b88a93f8749d7120a08cbe9d48f0b695d447a08/Headers/SVGPathInterpreter.h#L17) class method. I bet Sketch uses it internally to parse SVG files and convert them to vector shapes... let's give it a shot:
+```js
+var d = "m 18.015069,991.86506 -11.76393,0.092 -1.25114,0.01 0.0196,2.5023 1.25114,-0.01 9.80545,-0.076 4.63409,18.11514 11.76393,-0.092 1.25114,-0.01 -0.0196,-2.5019 -1.25114,0.01 -9.80545,0.077 -4.63409,-18.11514 z m 63.969859,0 -4.63409,18.11514 -9.80545,-0.077 -1.251136,-0.01 -0.01955,2.5019 1.251136,0.01 11.763935,0.092 4.634091,-18.11514 9.805451,0.076 1.251136,0.01 0.01955,-2.5023 -1.251136,-0.01 -11.763935,-0.092 z m -31.960659,1.3886 -2.38009,0.7725 0.38642,1.1902 c 0.42686,1.3151 0.59157,2.6771 0.74645,4.1278 l 0.13261,1.24404 2.48826,-0.2656 -0.13294,-1.24394 c -0.15653,-1.4663 -0.33069,-3.022 -0.85429,-4.6351 l -0.38642,-1.1899 z m -12.498,0.754 -0.66792,1.0579 c -1.39753,2.2137 -2.20708,5.14784 -2.20708,8.36864 0,3.2207 0.80955,6.1549 2.20708,8.3686 l 0.66792,1.0579 2.11586,-1.3358 -0.66793,-1.058 c -1.09082,-1.7278 -1.82066,-4.2388 -1.82066,-7.0327 0,-2.7939 0.72984,-5.30494 1.82066,-7.03284 l 0.66793,-1.0579 -2.11586,-1.3358 z m 24.94746,0 -2.11586,1.3358 0.66793,1.0579 c 1.09082,1.7279 1.820661,4.23894 1.820661,7.03284 0,2.7939 -0.729841,5.3049 -1.820661,7.0327 l -0.66793,1.058 2.11586,1.3358 0.667921,-1.0579 c 1.397528,-2.2137 2.207082,-5.1479 2.207082,-8.3686 0,-3.2208 -0.809554,-6.15494 -2.207082,-8.36864 l -0.667921,-1.0579 z m -18.45263,0.2681 -2.26703,1.0592 0.52978,1.1336 c 0.58528,1.2526 0.91584,2.5842 1.24788,4.00494 l 0.28476,1.2182 2.43678,-0.5695 -0.28476,-1.21824 c -0.33558,-1.4359 -0.6997,-2.9582 -1.41763,-4.4947 l -0.52978,-1.1335 z m 11.76687,0.1652 -0.23426,1.229 c -0.95694,5.01584 -3.50965,8.89534 -9.03425,11.48734 l -1.13253,0.5314 1.06281,2.2654 1.13286,-0.5314 c 6.15523,-2.8879 9.35583,-7.6584 10.42907,-13.28394 l 0.23426,-1.229 -2.45796,-0.4688 z";
+
+var isPathClosedPtr = MOPointer.alloc().init();
+var path = SVGPathInterpreter.bezierPathFromCommands_isPathClosed(d,isPathClosedPtr); // Returns an instance of `NSBezierPath`
+print('isClosed: '+isPathClosedPtr.value()); // Indicates whether path is closed or not.
+
+var shape = MSShapeGroup.shapeWithBezierPath(path);
+var fill = shape.style().addStylePartOfType(0);
+fill.color = MSColor.blackColor();
+
+shape.name = "Shrug";
+shape.frame().constrainProportions = true;
+shape.frame().origin = CGPointZero;
+shape.frame().height = 100;
+
+context.document.currentPage().addLayers([shape]);
+```
+
+> Note: Pay special attention to the required `isPathClosed` argument, that should be passed as pointer. You can read more about pointers in [#18 Using Obj-C Pointers + Handling Cocoa Errors](https://github.com/turbobabr/Sketch-Plugins-Cookbook#18-using-obj-c-pointers--handling-cocoa-errors) recipe.
+
 ## #19 Inserting Emoji as Bitmap Layers
 
 ![Emoji](./docs/emoji_circle.png)
