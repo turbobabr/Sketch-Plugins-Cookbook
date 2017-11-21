@@ -22,14 +22,14 @@ But, there is a second argument named `isPathClosed` of `(char *)` type which is
 Let's try to pass `null` value just to call the method, we don't really care about whether path is closed or not, we just need to convert it to `NSBezierPath` instance:
 ```js
 var path = SVGPathInterpreter.bezierPathFromCommands_isPathClosed("M10 80 Q 95 10 180 80",null);
-// -> Sketch crashes
+// -> Sketch crashes 💥💥💥
 ```
 
 Another attempt... let's feed an arbitrary variable to the method:
 ```js
 var isClosed;
 var path = SVGPathInterpreter.bezierPathFromCommands_isPathClosed("M10 80 Q 95 10 180 80",isClosed);
-// -> Sketch crashes
+// -> Sketch crashes 💥💥💥
 ```
 
 The correct way to call this method is to create `MOPointer` class instance and feed it to the method:
@@ -50,7 +50,7 @@ print(svgPathToBezierPath("M10 10 H 90 V 90 H 10 Z").isClosed);
 print(svgPathToBezierPath("M10 10 H 90 V 90 H 10").isClosed);
 // -> 0
 
-// No crashes! :)
+// No crashes! 😅
 ```
 
 #### Dealing with NSErrors and handling errors in AppKit APIs
