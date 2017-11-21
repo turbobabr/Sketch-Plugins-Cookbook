@@ -6,12 +6,16 @@ A collection of recipes for Sketch App plugins developers.
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
 ## #17 Working with files
-Author: [@pravdomil](https://github.com/pravdomil)
+Author: [@pravdomil](https://twitter.com/pravdomil)
 
 Save string to file.
 
 ```js
-function writeToFile(path, content) {
+function readFile(path) {
+    return NSString.stringWithContentsOfFile_encoding_error(path, NSUTF8StringEncoding, null);
+}
+
+function writeFile(path, content) {
     const string = NSString.stringWithFormat("%@", content);
     return string.writeToFile_atomically(path, true);
 }
