@@ -17,7 +17,7 @@ Suppose we want to convert [SVG Path Commands](https://developer.mozilla.org/en-
 
 But, there is a second argument named `isPathClosed` of `(char *)` type which is a pointer to a char(basically a single byte):
 
-![Image Pattern Fill](./docs/svg_interpreter_header.png)
+![SVGPathInterpreter](./docs/svg_interpreter_header.png)
 
 Let's try to pass `null` value just to call the method, we don't really care about whether path is closed or not, we just need to convert it to `NSBezierPath` instance:
 ```js
