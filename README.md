@@ -5,6 +5,84 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
+## #18 Using Obj-C Pointers + Handling Cocoa Errors
+
+Many AppKit and Sketch internal APIs have methods and functions that require passing so called `pointer to pointer` arguments. Whenever you see argument type that looks like `(id *)`, `NSError **`, `NSError * _Nullable *`, etc in any Objective-C API - it means that it wants pointer that points to a pointer thing :). It came to Objective-C from [C Programming Language](https://en.wikipedia.org/wiki/C_(programming_language)), since Objective-C is a layer build atop of `C Language`. You can read more about that pointer to pointer concept here - [TurorialsPoint: C - Pointer to Pointer](https://www.tutorialspoint.com/cprogramming/c_pointer_to_pointer.htm). Also, there's another case when we need to pass pointers to C value variables, e.g. `(char*)` to let method populate the value of that variable during it's execution.
+
+Too bad that JavaScript language and engines don't support such thing as pointer at all, but we need them! Good news everyone! Sketch uses [Mocha Framework](https://github.com/ccgus/CocoaScript/tree/master/src/framework/mocha) for bridging Objective-C objects to JavaScript context and this framework has a special class to deal with pointers called [MOPointer](https://github.com/ccgus/CocoaScript/blob/master/src/framework/mocha/Objects/MOPointer.h).
+
+#### Using MOPointer class to call methods requiring pointer as one of arguments
+
+Suppose we want to convert [SVG Path Commands](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths) to `NSBezierPath` for further use in our plugin. Sketch has a handy class named [SVGPathInterpreter](https://github.com/abynim/Sketch-Headers/blob/2b88a93f8749d7120a08cbe9d48f0b695d447a08/Headers/SVGPathInterpreter.h) and a super useful [+SVGPathInterpreter.bezierPathFromCommands:(NSString*)commands isPathClosed:(char *)isClosed](https://github.com/abynim/Sketch-Headers/blob/2b88a93f8749d7120a08cbe9d48f0b695d447a08/Headers/SVGPathInterpreter.h#L17) class method that takes a set of svg path commands as string and returns and instance of `NSBezierPath` representing the path defined by these commands.
+
+But, there is a second argument named `isPathClosed` of `(char *)` type which is a pointer to a char(basically a single byte):
+
+![Image Pattern Fill](./docs/svg_interpreter_header.png)
+
+Let's try to pass `null` value just to call the method, we don't really care about whether path is closed or not, we just need to convert it to `NSBezierPath` instance:
+```js
+var path = SVGPathInterpreter.bezierPathFromCommands_isPathClosed("M10 80 Q 95 10 180 80",null);
+// -> Sketch crashes
+```
+
+Another attempt... let's feed an arbitrary variable to the method:
+```js
+var isClosed;
+var path = SVGPathInterpreter.bezierPathFromCommands_isPathClosed("M10 80 Q 95 10 180 80",isClosed);
+// -> Sketch crashes
+```
+
+The correct way to call this method is to create `MOPointer` class instance and feed it to the method:
+```js
+function svgPathToBezierPath(svgPath) {
+    var isClosedPtr = MOPointer.alloc().init();
+    var path = SVGPathInterpreter.bezierPathFromCommands_isPathClosed(svgPath,isClosedPtr);
+
+    return {
+        path: path,
+        isClosed: isClosedPtr.value()
+    };
+}
+
+print(svgPathToBezierPath("M10 10 H 90 V 90 H 10 Z").isClosed);
+// -> 1
+
+print(svgPathToBezierPath("M10 10 H 90 V 90 H 10").isClosed);
+// -> 0
+
+// No crashes! :)
+```
+
+#### Dealing with NSErrors and handling errors in AppKit APIs
+
+There are dozens of APIs both in Sketch and AppKit that throws various errors, usually errors handling is optional and we can omit it. For example, let's take [+NSString.stringWithContentsOfFile:encoding:error:](stringWithContentsOfFile:encoding:error:) class method that can read text file to a string. In case this method fails to read file, it returns `null` as a result and indicates that something went wrong.
+
+Just run the following code in custom script editor without any changes:
+```js
+var path = "/some/non/existing/file/path.txt"
+var str = NSString.stringWithContentsOfFile_encoding_error(path, NSUTF8StringEncoding, null);
+print(str);
+// -> (null)
+```
+
+As you can see, it fails because the provided file isn't exist in your file system. It's not a big deal, since we receive `null` as a result and can check it making an assumption that `null` means that file isn't exist, but in reality the method might fail for a number of reasons like insufficient permissions, wrong encoding, etc.
+
+In order to check for exact reason why it fails, we have to use `MOPointer` class again:
+```js
+var path = "/some/non/existing/file/path.txt"
+var errorPtr = MOPointer.alloc().init()
+
+var str = NSString.stringWithContentsOfFile_encoding_error(path, NSUTF8StringEncoding, errorPtr);
+print(str);
+print(errorPtr.value())
+```
+
+As you can see, by calling `errorPtr.value()`, we get an instance of [NSError](https://developer.apple.com/documentation/foundation/nserror?language=objc) class describing the real reason why method failed:
+> Error Domain=NSCocoaErrorDomain Code=260 "The file “path.txt” couldn’t be opened because there is no such file." UserInfo={NSFilePath=/some/non/existing/file/path.txt, NSUnderlyingError=0x60800204c600 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}
+
+Handling errors correctly might help a lot during development phase as well as make your plugin more stable. I strongly recommend to check out [Dealing with Errors](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/ErrorHandling/ErrorHandling.html) and [Error Handling Programming Guide](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ErrorHandlingCocoa/ErrorHandling/ErrorHandling.html#//apple_ref/doc/uid/TP40001806) docs from Apple to get familiar with the way errors work and handled in Cocoa apps.
+
+
 ## #17 Working with files
 Author: [@pravdomil](https://twitter.com/pravdomil)
 
