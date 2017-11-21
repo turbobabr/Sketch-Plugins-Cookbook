@@ -508,7 +508,7 @@ if(layer) {
 }
 ```
 
-## #11 Creating Custom Shape
+## #11 Creating Custom Shapes
 
 To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and draw whatever shape or combination of shapes you want to. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
 
@@ -538,7 +538,7 @@ var currentParentGroup = documentData.currentPage().currentArtboard() || documen
 currentParentGroup.addLayers([shape]);
 ```
 
-## #10 Create Line Shape
+## #10 Creating Line Shapes
 
 In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and add two points to it. Then create a shape group from it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(NSBezierPath*)path` class method.
 
@@ -642,7 +642,7 @@ print("width: "+bounds.size.width);
 print("height: "+bounds.size.height);
 ```
 
-## #6 Creating Oval Shape
+## #6 Creating Oval Shapes
 
 In order to create an oval shape programmatically, you have to create an instance of `MSOvalShape` class, set its frame and wrap with `MSShapeGroup` container.
 
