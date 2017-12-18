@@ -172,7 +172,7 @@ Handling errors correctly might help a lot during development phase as well as m
 
 
 ## #17 Working with files
-Author: [@pravdomil](https://twitter.com/pravdomil)
+Author: [@pravdomil](https://pravdomil.com/#sketch)
 
 Save string to file.
 
