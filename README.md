@@ -496,14 +496,14 @@ The origin and size of the rectangle you provide to this method should be in abs
 
 The following example centers viewport by `x:200,y:200` point:
 ```JavaScript
-var canvasView = context.document.currentView(); // Getting canvas view
+var canvasView = context.document.contentDrawView(); // Getting canvas view
 canvasView.centerRect_animated(CGRectMake(200,200,1,1),true);
 ```
 The example below shows how to center on the first selected layer using the same method without animation:
 ```JavaScript
 var layer = context.selection.firstObject()
 if(layer) {
-    var view = context.document.currentView();
+    var view = context.document.contentDrawView();
     view.centerRect_animated(layer.absoluteRect().rect(),false);
 }
 ```
