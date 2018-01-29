@@ -73,7 +73,7 @@ function randomPointAtCircle(centerX,centerY,radius) {
 function layerWithImage(image) {
     var layer = MSBitmapLayer.alloc().init();
     layer.rect = CGRectMake(0,0,128,128);
-    layer.image = MSImageData.alloc().initWithImageConvertingColorSpace(image);
+    layer.image = MSImageData.alloc().initWithImage(image);
     layer.frame().mid = randomPointAtCircle(400,400,400)
     layer.multiplyBy(0.2 + 0.8*Math.random());
     layer.makeRectIntegral();
@@ -234,7 +234,7 @@ if(layer && layer.style().firstEnabledFill()) {
     if(image) {
         fill.fillType = FillType.Pattern;
         fill.patternFillType = PatternFillType.Fill;
-        fill.image = MSImageData.alloc().initWithImageConvertingColorSpace(image);
+        fill.image = MSImageData.alloc().initWithImage(image);
 
     } else {
         context.document.showMessage("[erorr]: Can't load image!");
@@ -282,7 +282,7 @@ if(layer && layer.style().firstEnabledFill()) {
     if(image) {
         fill.fillType = FillType.Pattern;
         fill.patternFillType = PatternFillType.Fill;
-        fill.image = MSImageData.alloc().initWithImageConvertingColorSpace(image);
+        fill.image = MSImageData.alloc().initWithImage(image);
 
     } else {
         print("Can't load image!");
@@ -319,7 +319,7 @@ if(layer && layer.style().firstEnabledFill()) {
         fill.patternFillType = PatternFillType.Tile;
         fill.patternTileScale = 0.1; // This property is just a multiplier of original image size
 
-        fill.image = MSImageData.alloc().initWithImageConvertingColorSpace(image);
+        fill.image = MSImageData.alloc().initWithImage(image);
 
     } else {
         context.document.showMessage("[erorr]: Can't load image!");
