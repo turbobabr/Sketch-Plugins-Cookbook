@@ -5,7 +5,7 @@ A collection of recipes for Sketch App plugins developers.
 
 I will be posting daily updates in my twitter. Follow me [@turbobabr](https://twitter.com/turbobabr) to stay tuned.
 
-> NOTE: All the samples tested against Sketch 51
+> NOTE: All the samples are tested against Sketch 51
 
 ## #20 Converting SVG Path Commands to Sketch Vector Shapes
 
