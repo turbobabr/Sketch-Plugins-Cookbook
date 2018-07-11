@@ -18,7 +18,7 @@ var isPathClosedPtr = MOPointer.alloc().init();
 var path = SVGPathInterpreter.bezierPathFromCommands_isPathClosed(d,isPathClosedPtr); // Returns an instance of `NSBezierPath`
 print('isClosed: '+isPathClosedPtr.value()); // Indicates whether path is closed or not.
 
-var shape = MSShapeGroup.shapeWithBezierPath(path);
+var shape = MSShapeGroup.shapeWithBezierPath(MSPath.pathWithBezierPath(path));
 var fill = shape.style().addStylePartOfType(0);
 fill.color = MSColor.blackColor();
 
