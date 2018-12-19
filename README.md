@@ -20,7 +20,7 @@ var isPathClosedPtr = MOPointer.alloc().init();
 var path = SVGPathInterpreter.bezierPathFromCommands_isPathClosed(d,isPathClosedPtr); // Returns an instance of `NSBezierPath`
 print('isClosed: '+isPathClosedPtr.value()); // Indicates whether path is closed or not.
 
-var shape = MSShapeGroup.shapeWithBezierPath(MSPath.pathWithBezierPath(path));
+var shape = MSShapeGroup.layerWithPath(MSPath.pathWithBezierPath(path));
 var fill = shape.style().addStylePartOfType(0);
 fill.color = MSColor.blackColor();
 
@@ -512,7 +512,7 @@ if(layer) {
 
 ## #11 Creating Custom Shapes
 
-To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and draw whatever shape or combination of shapes you want to. Then convert the path to `MSPath` class instance and create a shape group out of it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(MSPath*)path` class method.
+To create a custom vector shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and draw whatever shape or combination of shapes you want to. Then convert the path to `MSPath` class instance and create a shape group out of it using `+(MSShapeGroup*)MSShapeGroup.layerWithPath:(MSPath*)path` class method.
 
 ![Create Custom Shape](./docs/create_custom_shape.png)
 
@@ -531,7 +531,7 @@ path.lineToPoint(NSMakePoint(100,20));
 path.lineToPoint(NSMakePoint(10,20));
 path.closePath();
 
-var shape = MSShapeGroup.shapeWithBezierPath(MSPath.pathWithBezierPath(path));
+var shape = MSShapeGroup.layerWithPath(MSPath.pathWithBezierPath(path));
 var fill = shape.style().addStylePartOfType(0); // `0` constant indicates that we need a `fill` part to be created
 fill.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 
@@ -542,7 +542,7 @@ currentParentGroup.addLayers([shape]);
 
 ## #10 Creating Line Shapes
 
-In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and add two points to it. Then convert the path to `MSPath` class instance and create a shape group out of it using `+(MSShapeGroup*)MSShapeGroup.shapeWithBezierPath:(MSPath*)path` class method.
+In order to create a line shape programmatically, you have to create an instance of [NSBezierPath](https://developer.apple.com/documentation/appkit/nsbezierpath?language=objc) class and add two points to it. Then convert the path to `MSPath` class instance and create a shape group out of it using `+(MSShapeGroup*)MSShapeGroup.layerWithPath:(MSPath*)path` class method.
 
 ![Create Line Shape](./docs/create_line_shape.png)
 
@@ -554,7 +554,7 @@ var path = NSBezierPath.bezierPath();
 path.moveToPoint(NSMakePoint(10,10));
 path.lineToPoint(NSMakePoint(200,200));
 
-var shape = MSShapeGroup.shapeWithBezierPath(MSPath.pathWithBezierPath(path));
+var shape = MSShapeGroup.layerWithPath(MSPath.pathWithBezierPath(path));
 var border = shape.style().addStylePartOfType(1);
 border.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 border.thickness = 3;
@@ -572,7 +572,7 @@ path.moveToPoint(NSMakePoint(84.5,161));
 [path curveToPoint:NSMakePoint(84.5,-2) controlPoint1:NSMakePoint(166,34.5) controlPoint2:NSMakePoint(129.5,-2)];
 [path curveToPoint:NSMakePoint(3,79.5) controlPoint1:NSMakePoint(39.5,-2) controlPoint2:NSMakePoint(3,34.5)];
 
-var shape = MSShapeGroup.shapeWithBezierPath(MSPath.pathWithBezierPath(path));
+var shape = MSShapeGroup.layerWithPath(MSPath.pathWithBezierPath(path));
 var border = shape.style().addStylePartOfType(1);
 border.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
 border.thickness = 2;
@@ -746,7 +746,7 @@ function convertToOutlines(layer) {
     if(!layer.isKindOfClass(MSTextLayer)) return;
 
     var parent = layer.parentGroup();
-    var shape = MSShapeGroup.shapeWithBezierPath(layer.pathInFrameWithTransforms());
+    var shape = MSShapeGroup.layerWithPath(layer.pathInFrameWithTransforms());
 
     var style = shape.style();
     var fill = style.addStylePartOfType(0);
