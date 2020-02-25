@@ -253,8 +253,8 @@ In order to use remote image file we have to download it first and convert to an
 const FillType = { Solid: 0, Gradient: 1, Pattern: 4, Noise: 5 };
 const PatternFillType = { Tile: 0, Fill: 1, Stretch: 2, Fit: 3};
 
-function fetchImage(url,ingnoreCache) {
-    var request = ingnoreCache ?NSURLRequest.requestWithURL_cachePolicy_timeoutInterval(NSURL.URLWithString(url),NSURLRequestReloadIgnoringLocalCacheData,60) : NSURLRequest.requestWithURL(NSURL.URLWithString(url));
+function fetchImage(url, ignoreCache) {
+    var request = ignoreCache ?NSURLRequest.requestWithURL_cachePolicy_timeoutInterval(NSURL.URLWithString(url),NSURLRequestReloadIgnoringLocalCacheData,60) : NSURLRequest.requestWithURL(NSURL.URLWithString(url));
     var responsePtr = MOPointer.alloc().init();
     var errorPtr = MOPointer.alloc().init();
 
