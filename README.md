@@ -422,7 +422,7 @@ typeOf(strB);
 // -> [object MOBoxedObject]
 ```
 
-As you can see, variables `strA` & `strB` are of different types. `strA` is a JavaScript string, but `strB` is a mysterious `MOBoxedObject`. The problem is in definition of `strB` - `@"hello!"` is equal to `NSString.stringWithString("hello!")` and it produces boxed instance of NSString class instead of JS string.
+As you can see, variables `strA` & `strB` are of different types. `strA` is a [JavaScript string](https://www.scaler.com/topics/javascript/javascript-string/), but `strB` is a mysterious `MOBoxedObject`. The problem is in definition of `strB` - `@"hello!"` is equal to `NSString.stringWithString("hello!")` and it produces boxed instance of NSString class instead of JS string.
 
 When developing Sketch plugins, you usually deal with the data that is produced on `Sketch Runtime` side. And most of the property getters and class methods return boxed Objective-C objects instead of native JS objects.
 
